@@ -21,6 +21,7 @@ class MyApp extends StatelessWidget {
       designSize: const Size(390, 844),
       child: GetMaterialApp(
           title: 'Analects',
+          debugShowCheckedModeBanner: false,
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
             useMaterial3: true,

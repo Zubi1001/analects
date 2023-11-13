@@ -1,6 +1,4 @@
-import 'package:analects/app/data/contents/app_colors.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../widgets/widget_imports.dart';
 
 class PlayAndPauseButton extends StatelessWidget {
   const PlayAndPauseButton(
@@ -16,17 +14,16 @@ class PlayAndPauseButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: height ?? 50.h,
-      width: width ?? 50.h,
-      decoration: const BoxDecoration(
-          color: AppColors.kButtonColor, shape: BoxShape.circle),
-      child: IconButton(
-          icon: Icon(
-            isPlaying ? Icons.pause : Icons.play_arrow,
-            color: AppColors.kWhiteColor,
-          ),
-          onPressed: onPressed),
+    return InkWell(
+      onTap: onPressed,
+      child: Container(
+        height: height ?? 50.h,
+        width: width ?? 50.h,
+        decoration: const BoxDecoration(color: AppColors.kSecondaryColor, shape: BoxShape.circle),
+        child: Center(
+          child: SvgPicture.asset(isPlaying ? AppAssets.playButton : AppAssets.pauseButton,),
+        ),
+      ),
     );
   }
 }

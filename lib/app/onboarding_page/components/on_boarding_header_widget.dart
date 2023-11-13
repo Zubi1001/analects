@@ -13,7 +13,7 @@ class HeaderWidgetOfOnBoardingPage extends StatelessWidget {
         alignment: Alignment.center,
         decoration: const BoxDecoration(
           image: DecorationImage(
-              image: AssetImage(AppAssets.onBoardingHeaderImages), fit: BoxFit.fill),
-        ));
+              image: AssetImage(AppAssets.onBoardingHeaderImages), fit: BoxFit.fitWidth),
+        ),);
   }
 }

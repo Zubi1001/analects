@@ -17,7 +17,7 @@ class AppTypography {
       GoogleFonts.inter(fontSize: 18.sp, fontWeight: FontWeight.w400);
 
   static TextStyle specialTextStyle = TextStyle(
-      color: AppColors.kButtonColor,
+      color: AppColors.kSecondaryColor,
       fontSize: 16.sp,
       fontWeight: FontWeight.bold);
 

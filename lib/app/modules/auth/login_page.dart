@@ -1,15 +1,4 @@
-import 'package:analects/app/data/contents/app_assets.dart';
-import 'package:analects/app/data/contents/app_colors.dart';
-import 'package:analects/app/data/contents/app_typography.dart';
-import 'package:analects/app/modules/auth/components/cutsom_text_filed.dart';
-import 'package:analects/app/modules/auth/sing_up_page.dart';
-import 'package:analects/app/modules/home/landing_page.dart';
-import 'package:analects/app/modules/widgets/button/custom_text_button.dart';
-import 'package:analects/app/modules/widgets/button/login_signin_button.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import '../widgets/widget_imports.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
@@ -22,10 +11,10 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: AppColors.kPrimaryColor,
-        body: Form(
+    return Scaffold(
+      backgroundColor: AppColors.kPrimaryColor,
+      body: SafeArea(
+        child: Form(
           key: _fromKey,
           child: SingleChildScrollView(
             child: Center(
@@ -82,7 +71,7 @@ class LoginPage extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 50.h),
-                LoginSignInCustomButton(
+                CustomButton(
                   width: 343.w,
                   text: 'Log In',
                   onTap: () {
@@ -113,14 +102,14 @@ class LoginPage extends StatelessWidget {
                     style: AppTypography.kLight14,
                   ),
                   CustomTextButton(
-                      text: 'Sing Up',
+                      text: 'Sign Up',
                       textStyle: AppTypography.specialTextStyle,
                       onPressed: () {
                         //here we will navigate to the sign up page.
                         Get.to(() => SignUpPage());
-                      }),
-                ]),
-              ]),
+                      },),
+                ],),
+              ],),
             ),
           ),
         ),

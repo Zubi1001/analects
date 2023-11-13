@@ -1,13 +1,5 @@
-import 'package:analects/app/data/contents/app_assets.dart';
-import 'package:analects/app/data/contents/app_colors.dart';
-import 'package:analects/app/data/contents/app_typography.dart';
-import 'package:analects/app/modules/auth/components/cutsom_text_filed.dart';
-import 'package:analects/app/modules/widgets/button/custom_text_button.dart';
-import 'package:analects/app/modules/widgets/button/login_signin_button.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
+import '../widgets/widget_imports.dart';
+
 
 class SignUpPage extends StatelessWidget {
   SignUpPage({super.key});
@@ -23,10 +15,10 @@ class SignUpPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: AppColors.kPrimaryColor,
-        body: Form(
+    return Scaffold(
+      backgroundColor: AppColors.kPrimaryColor,
+      body: SafeArea(
+        child: Form(
           key: _fromKey,
           child: SingleChildScrollView(
             child: Center(
@@ -34,7 +26,7 @@ class SignUpPage extends StatelessWidget {
                 SizedBox(
                   height: 20.h,
                 ),
-                Text('Sing Up',
+                Text('Sign Up',
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 24.sp,
@@ -43,7 +35,7 @@ class SignUpPage extends StatelessWidget {
                   height: 10.h,
                 ),
                 Text(
-                  'Sing up to continue the app',
+                  'Sign up to continue the app',
                   style: AppTypography.kLight14,
                 ),
                 SizedBox(
@@ -102,7 +94,7 @@ class SignUpPage extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 50.h),
-                LoginSignInCustomButton(
+                CustomButton(
                   width: 343.w,
                   text: 'Sign Up',
                   onTap: () {

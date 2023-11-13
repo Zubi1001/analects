@@ -1,12 +1,6 @@
-import 'package:analects/app/data/contents/app_colors.dart';
-import 'package:analects/app/modules/auth/login_page.dart';
-import 'package:analects/app/modules/auth/sing_up_page.dart';
-import 'package:analects/app/modules/widgets/button/custom_text_button.dart';
-import 'package:analects/app/modules/widgets/button/login_signin_button.dart';
-import 'package:analects/app/onboarding_page/components/on_boarding_header_widget.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
+
+
+import '../modules/widgets/widget_imports.dart';
 
 class OnBoardingPage extends StatelessWidget {
   const OnBoardingPage({super.key});
@@ -35,17 +29,21 @@ class OnBoardingPage extends StatelessWidget {
                             color: Colors.white.withOpacity(0.4),
                             fontSize: 20.sp)),
                     SizedBox(height: 40.h),
-                    LoginSignInCustomButton(
+                    CustomButton(
                         onTap: () {
-                          Get.to(() => LoginPage());
-                        },
+                          Get.to(
+                        () => LoginPage(),
+                      );
+                    },
                         text: 'Log In'),
                     SizedBox(height: 20.h),
                     CustomTextButton(
                         text: 'Sign Up',
                         onPressed: () {
-                          Get.to(() => SignUpPage());
-                        })
+                          Get.to(
+                        () => SignUpPage(),
+                      );
+                    })
                   ]),
             ),
           ),

@@ -1,3 +1,4 @@
+import 'package:analects/app/data/contents/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -40,7 +41,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
       validator: widget.validator,
       style: TextStyle(color: Colors.white, fontSize: 16.sp),
       decoration: InputDecoration(
-        fillColor: Colors.white.withOpacity(0.01),
+        fillColor: AppColors.kWhiteColor.withOpacity(0.1),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(20.r),
           borderSide: BorderSide.none,
@@ -60,6 +61,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
               )
             : null,
         hintText: widget.hintText,
+        hintStyle: TextStyle(color: AppColors.kWhiteColor.withOpacity(.5),fontSize: 16.w),
         filled: true,
       ),
     );
