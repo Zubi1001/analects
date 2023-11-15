@@ -33,6 +33,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       controller: widget.controller,
       obscureText: widget.isPasswordField && isObscure,
       focusNode: widget.focusNode,
@@ -41,7 +42,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
       validator: widget.validator,
       style: TextStyle(color: Colors.white, fontSize: 16.sp),
       decoration: InputDecoration(
-        fillColor: AppColors.kWhiteColor.withOpacity(0.1),
+        fillColor: AppColors.kPrimary1Color,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(20.r),
           borderSide: BorderSide.none,

@@ -1,6 +1,4 @@
-import 'package:analects/app/data/contents/app_assets.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../modules/widgets/widget_imports.dart';
 
 class HeaderWidgetOfOnBoardingPage extends StatelessWidget {
   const HeaderWidgetOfOnBoardingPage({super.key});
@@ -8,10 +6,11 @@ class HeaderWidgetOfOnBoardingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: 500.h,
+        height: 450.h,
         width: 300.w,
         alignment: Alignment.center,
         decoration: const BoxDecoration(
+          // color: AppColors.kSecondaryColor,
           image: DecorationImage(
               image: AssetImage(AppAssets.onBoardingHeaderImages), fit: BoxFit.fitWidth),
         ),);

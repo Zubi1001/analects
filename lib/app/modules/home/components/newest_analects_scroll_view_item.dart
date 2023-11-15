@@ -16,7 +16,7 @@ class AnalectsListViewItem extends StatelessWidget {
             children: [
               Container(
                 height: 80.h,
-                width: 110.w,
+                width: 90.w,
                 decoration: BoxDecoration(
                     color: AppColors.kWhiteColor,
                     borderRadius: BorderRadius.circular(23.r),
@@ -33,9 +33,12 @@ class AnalectsListViewItem extends StatelessWidget {
                   Text('Song name', style: AppTypography.kBold14),
                   SizedBox(height: 10.h),
                   Text('Title',
-                      style: AppTypography.kExtraLight12.copyWith(color: AppColors.kWhiteColor.withOpacity(0.5))),
+                      style: AppTypography.kExtraLight12.copyWith(
+                          color: AppColors.kWhiteColor.withOpacity(0.5))),
                   SizedBox(height: 10.h),
-                  Text('Singer name', style: AppTypography.kExtraLight12.copyWith(color: AppColors.kWhiteColor)),
+                  Text('Singer name',
+                      style: AppTypography.kExtraLight12
+                          .copyWith(color: AppColors.kWhiteColor)),
                 ],
               ),
               Spacer(),

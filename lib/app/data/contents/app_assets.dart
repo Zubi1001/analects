@@ -14,4 +14,12 @@ class AppAssets {
   static const String subscriptionIcon = 'assets/icons/subscription.svg';
   static const String checkIcon = 'assets/icons/check.svg';
   static const String moreIcon = 'assets/icons/more.svg';
+  static const String micIcon = 'assets/icons/mic.svg';
+  static const String audioDiscardIcon = 'assets/icons/audio_discard.svg';
+  static const String audioSaveIcon = 'assets/icons/audio_save.svg';
+  static const String stopAudioIcon = 'assets/icons/stop_audio.svg';
+  static const String addIcon = 'assets/icons/add.svg';
+
+  //our animations
+  static const String audioAnimation = 'assets/animations/audio.json';
 }

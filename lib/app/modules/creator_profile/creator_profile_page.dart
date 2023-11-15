@@ -1,4 +1,7 @@
+import 'package:analects/app/modules/create_analects/create_analects.dart';
 import 'package:analects/app/modules/widgets/widget_imports.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:pull_down_button/pull_down_button.dart';
 
 class CreatorProfilePage extends StatelessWidget {
   const CreatorProfilePage({super.key});
@@ -7,18 +10,34 @@ class CreatorProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.kPrimaryColor,
-      appBar:    CustomAppBar(
+      appBar: CustomAppBar(
         title: "",
         backgroundColor: AppColors.noColor,
         actions: [
-          GestureDetector(
-            onTap: () {
-            },
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 30.w),
-              child: SvgPicture.asset(AppAssets.moreIcon),
-            ),
-          )
+          PullDownButton(
+              itemBuilder: (context) => [
+                    PullDownMenuItem(
+                      title: "Create Analects",
+                      onTap: () {
+                        Get.to(() => CreateAnalects());
+                      }, 
+                    ),
+                  ],
+              position: PullDownMenuPosition.automatic,
+              buttonBuilder: (context, show) => CupertinoButton(
+                    onPressed: show,
+                    padding: EdgeInsets.zero,
+                    color: AppColors.noColor,
+                    child: SvgPicture.asset(AppAssets.moreIcon),
+                  )),
+          // GestureDetector(
+          //   onTap: () {
+          //   },
+          //   child: Padding(
+          //     padding: EdgeInsets.symmetric(horizontal: 30.w),
+          //     child: SvgPicture.asset(AppAssets.moreIcon),
+          //   ),
+          // )
         ],
       ),
       body: SafeArea(
@@ -33,12 +52,16 @@ class CreatorProfilePage extends StatelessWidget {
                   decoration: const BoxDecoration(
                     shape: BoxShape.circle,
                     color: AppColors.kSecondaryColor,
-                    image: DecorationImage(image: AssetImage(AppAssets.creatorImage), fit: BoxFit.cover),
+                    image: DecorationImage(
+                        image: AssetImage(AppAssets.creatorImage),
+                        fit: BoxFit.cover),
                   ),
                 ),
               ),
               SizedBox(height: 10.h),
-              Text("Joy & Jill", style: AppTypography.kBold24.copyWith(color: AppColors.kWhiteColor)),
+              Text("Joy & Jill",
+                  style: AppTypography.kBold24
+                      .copyWith(color: AppColors.kWhiteColor)),
               SizedBox(height: 15.h),
               Text(
                 "Odio consequat ut interdum massa vivamus sem auctor. Malesuada ultrices curabitur sed scelerisque purus hendrerit.",
@@ -97,7 +120,7 @@ class CreatorProfilePage extends StatelessWidget {
                   CustomButton(
                     text: "Subscribe",
                     onTap: () {
-                      Get.to(()=> SubscriptionPage());
+                      Get.to(() => SubscriptionPage());
                     },
                     width: 150.w,
                     height: 55.h,
@@ -141,4 +164,3 @@ class CreatorProfilePage extends StatelessWidget {
     );
   }
 }
-

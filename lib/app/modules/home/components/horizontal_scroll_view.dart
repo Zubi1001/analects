@@ -1,6 +1,7 @@
 import '../../widgets/widget_imports.dart';
 
 
+// ignore: must_be_immutable
 class HorizontalScrollView extends StatelessWidget {
   bool topLabelCheck;
 

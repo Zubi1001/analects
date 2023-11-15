@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1036055711504",
+    "project_id": "analects-7010c",
+    "storage_bucket": "analects-7010c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1036055711504:android:d22179bb92e514bbfedf95",
+        "android_client_info": {
+          "package_name": "com.example.analects"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBXrgRfKWERE8TyIIJmP6eUPpYKFgzfTJw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

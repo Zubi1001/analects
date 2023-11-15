@@ -39,6 +39,14 @@ dependencies:
   flutter_svg: ^2.0.8
   get: ^4.6.6
   google_fonts: ^6.1.0
+  firebase_core: ^2.22.0
+  email_validator: ^2.1.17
+  cloud_firestore: ^4.13.0
+  firebase_auth: ^4.13.0
+  google_sign_in: ^6.1.6
+  pull_down_button: ^0.9.3
+  lottie: ^2.7.0
+  dropdown_button2: ^2.0.0
   
 
 dev_dependencies:
@@ -67,6 +75,7 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/animations/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -1,6 +1,5 @@
 import '../widgets/widget_imports.dart';
 
-
 class SignUpPage extends StatelessWidget {
   SignUpPage({super.key});
 
@@ -12,6 +11,7 @@ class SignUpPage extends StatelessWidget {
       TextEditingController();
   final _confirmPassFocusNode = FocusNode();
   final _fromKey = GlobalKey<FormState>();
+  final AuthService authService = AuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +51,9 @@ class SignUpPage extends StatelessWidget {
                       if (value!.isEmpty) {
                         return 'Please enter your email';
                       }
+                      if (!EmailValidator.validate(value)) {
+                        return 'Please enter a valid email';
+                      }
                       return null;
                     },
                   ),
@@ -70,6 +73,9 @@ class SignUpPage extends StatelessWidget {
                       if (value!.isEmpty) {
                         return 'Please enter your password';
                       }
+                      if (value.length < 8) {
+                        return 'Password must be at least 8 characters';
+                      }
                       return null;
                     },
                   ),
@@ -87,7 +93,10 @@ class SignUpPage extends StatelessWidget {
                     focusNode: _confirmPassFocusNode,
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return 'Please enter your password';
+                        return 'Please enter your confirm password';
+                      }
+                      if (value != _passwordController.text) {
+                        return 'Password does not match';
                       }
                       return null;
                     },
@@ -97,10 +106,11 @@ class SignUpPage extends StatelessWidget {
                 CustomButton(
                   width: 343.w,
                   text: 'Sign Up',
-                  onTap: () {
+                  onTap: () async {
                     if (_fromKey.currentState!.validate()) {
-                      print('Email: ${_emailController.text}');
-                      print('Password: ${_passwordController.text}');
+                      await authService.signupWithEmail(
+                          email: _emailController.text,
+                          password: _passwordController.text);
                     }
                   },
                 ),
