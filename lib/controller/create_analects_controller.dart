@@ -2,10 +2,11 @@ import 'dart:async';
 
 import 'package:analects/app/modules/widgets/widget_imports.dart';
 
-class CreateAnalectsController extends GetxController {
+class CreateAnalectsController extends GetxController { 
   var isRunning = false.obs;
   var startTime = 0.obs;
   var elapsedTime = 0.obs;
+  
 
   String get displayTime {
     Duration duration = Duration(milliseconds: elapsedTime.value);

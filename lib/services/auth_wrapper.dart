@@ -1,14 +1,9 @@
-
-import 'package:analects/controller/auth_controller.dart';
-import 'package:analects/controller/user_controller.dart';
-import 'package:analects/services/auth_service.dart';
-
 import '../app/modules/widgets/widget_imports.dart';
 
 class AuthWrapper extends StatelessWidget {
   AuthWrapper({super.key});
 
-  final authController = Get.put<AuthController>(AuthController());
+  final authController = Get.find<AuthController>();
 
   @override
   Widget build(BuildContext context) {

@@ -1,11 +1,4 @@
-
-
-
-
-
-
 import 'package:analects/app/modules/widgets/widget_imports.dart';
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,20 +13,20 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     return ScreenUtilInit(
       useInheritedMediaQuery: true,
       designSize: const Size(390, 844),
-      builder: (_,child){
-        return  GetMaterialApp(
-          title: 'Analects',
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-            useMaterial3: true,
-          ),
-          home: AuthWrapper());
-      } ,
+      builder: (_, child) {
+        Get.put<AuthController>(AuthController(), permanent: true);
+        return GetMaterialApp(
+            title: 'Analects',
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+              useMaterial3: true,
+            ),
+            home: AuthWrapper());
+      },
     );
   }
 }

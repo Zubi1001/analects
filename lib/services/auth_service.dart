@@ -85,6 +85,7 @@ class AuthService {
   Future<void> signOut() async {
     try {
       await _auth.signOut();
+      await GoogleSignIn().signOut();
       Get.delete<UserController>(force: true);
     } catch (e) {
       log(e.toString());

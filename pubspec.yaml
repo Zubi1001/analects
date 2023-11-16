@@ -47,6 +47,7 @@ dependencies:
   pull_down_button: ^0.9.3
   lottie: ^2.7.0
   dropdown_button2: ^2.0.0
+  sleek_circular_slider: ^2.0.1
   
 
 dev_dependencies:

@@ -1,7 +1,5 @@
 import 'package:analects/app/modules/widgets/widget_imports.dart';
 
-
-
 class CreateAnalects extends StatelessWidget {
   const CreateAnalects({super.key});
 
@@ -35,10 +33,8 @@ class CreateAnalects extends StatelessWidget {
                         Lottie.asset(
                           AppAssets.audioAnimation,
                           animate: controller.isRunning.value,
-                          repeat: controller.isRunning.value
-                              ? true
-                              : false,
-                               frameRate: FrameRate.max,
+                          repeat: controller.isRunning.value ? true : false,
+                          frameRate: FrameRate.max,
                         ),
                         Text(
                           controller.displayTime,
@@ -85,7 +81,7 @@ class CreateAnalects extends StatelessWidget {
                       ),
                       SizedBox(width: 35.w),
                       GestureDetector(
-                        onTap: () => Get.to(()=> AnalectDetail()),
+                        onTap: () => Get.to(() => AnalectDetail()),
                         child: SvgPicture.asset(
                           AppAssets.audioSaveIcon,
                           height: 30.h,

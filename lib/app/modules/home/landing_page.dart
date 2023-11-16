@@ -9,46 +9,53 @@ class LandingPage extends StatelessWidget {
       backgroundColor: AppColors.kPrimaryColor,
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Column(children: [
-            Padding(
-              padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 20.h),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('Hey John!', style: AppTypography.kExtraBold20),
-                  Icon(
-                    Icons.search,
-                    color: Colors.white,
-                    size: 30.sp,
-                  )
-                ],
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 20.h),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Hey John!', style: AppTypography.kExtraBold20),
+                    Icon(
+                      Icons.search,
+                      color: Colors.white,
+                      size: 30.sp,
+                    )
+                  ],
+                ),
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 30.h),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Padding(
+                padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 30.h),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text('Top Creators', style: AppTypography.kExtraBold20),
                     InkWell(
                       onTap: () => Get.to(() => const Discover()),
-                      child: Text('See All', style: AppTypography.specialTextStyle),
+                      child: Text('See All',
+                          style: AppTypography.specialTextStyle),
                     ),
                   ],
                 ),
-            ),
-            SizedBox(height: 20.h),
-            Padding(
+              ),
+              SizedBox(height: 20.h),
+              Padding(
                 padding: EdgeInsets.only(
                   left: 10.w,
                 ),
-                child:  HorizontalScrollView(topLabelCheck: true,)),
-            SizedBox(height: 20.h),
-            Padding(
-              padding: EdgeInsets.only(left: 20.w),
+                child: HorizontalScrollView(
+                  topLabelCheck: true,
+                ),
+              ),
+              SizedBox(height: 20.h),
+              Padding(
+                padding: EdgeInsets.only(left: 20.w),
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
-                    children: [Text('Catagories', style: AppTypography.kExtraBold20)]),
+                    children: [
+                      Text('Catagories', style: AppTypography.kExtraBold20)
+                    ]),
               ),
               SizedBox(height: 20.h),
               Padding(
@@ -61,10 +68,21 @@ class LandingPage extends StatelessWidget {
                 padding: EdgeInsets.only(left: 20.w),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
-                  children: [Text('Newest Analects', style: AppTypography.kExtraBold20)],
+                  children: [
+                    Text('Newest Analects', style: AppTypography.kExtraBold20)
+                  ],
                 ),
               ),
-              Padding(padding: EdgeInsets.symmetric(horizontal: 20.w), child: const AnalectsListView())
+              ListView.builder(
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                scrollDirection: Axis.vertical,
+                itemCount: 10,
+                itemBuilder: (context, index) {
+                  return const AnalectsListViewItem();
+                },
+              ),
             ],
           ),
         ),

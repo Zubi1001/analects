@@ -1,3 +1,5 @@
+
+
 import '../../widgets/widget_imports.dart';
 
 // ignore: must_be_immutable
@@ -9,7 +11,7 @@ class HorizontalScrollViewItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => Get.to(() => CreatorProfilePage()),
+      onTap: () => Get.to(() => const CreatorProfilePage()),
       child: Container(
         width: 320.h,
         margin: EdgeInsets.all(6.h),
@@ -62,7 +64,9 @@ class HorizontalScrollViewItem extends StatelessWidget {
               bottom: 20.h,
               right: 20.w,
               child: PlayAndPauseButton(
-                onPressed: () {},
+                onPressed: () {
+                  Get.to(() =>  PlayAnalect());
+                },
                 isPlaying: false,
               ),
             ),

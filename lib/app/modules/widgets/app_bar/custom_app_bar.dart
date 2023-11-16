@@ -8,6 +8,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final double elevation;
   final bool centerTitle;
   final double fontSize;
+    final VoidCallback? onBack;
+
+
+
 
   const CustomAppBar({
     Key? key,
@@ -19,7 +23,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.centerTitle = true,
     this.backColor = AppColors.kWhiteColor,
     this.fontSize = 16.0,
-    this.hasBackButton = false,
+    this.hasBackButton = false, 
+    this.onBack,
   }) : super(key: key);
 
   @override
@@ -30,7 +35,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       shadowColor: shadowColor,
       leading: hasBackButton
           ? InkWell(
-              onTap: () {
+              onTap: onBack ?? () {
                 Get.back();
               },
               child: const Icon(

@@ -10,6 +10,8 @@ class CustomTextField extends StatefulWidget {
   final TextInputType? keyboardType;
   final TextInputAction? textInputAction;
   final String? Function(String?)? validator;
+  final VoidCallback? Function(String?)? changeFunction;
+  final VoidCallback? Function(String?)? completeFunction;
   final bool isPasswordField;
 
   const CustomTextField({
@@ -20,6 +22,8 @@ class CustomTextField extends StatefulWidget {
     this.keyboardType,
     this.textInputAction,
     this.validator,
+    this.changeFunction,
+    this.completeFunction,
     this.isPasswordField = false,
   });
 
@@ -40,6 +44,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
       keyboardType: widget.keyboardType,
       textInputAction: widget.textInputAction,
       validator: widget.validator,
+      onChanged: widget.changeFunction,
+      onFieldSubmitted: widget.completeFunction,
       style: TextStyle(color: Colors.white, fontSize: 16.sp),
       decoration: InputDecoration(
         fillColor: AppColors.kPrimary1Color,
@@ -62,7 +68,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
               )
             : null,
         hintText: widget.hintText,
-        hintStyle: TextStyle(color: AppColors.kWhiteColor.withOpacity(.5),fontSize: 16.w),
+        hintStyle: TextStyle(
+            color: AppColors.kWhiteColor.withOpacity(.5), fontSize: 16.w),
         filled: true,
       ),
     );

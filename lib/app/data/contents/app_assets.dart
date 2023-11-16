@@ -19,6 +19,13 @@ class AppAssets {
   static const String audioSaveIcon = 'assets/icons/audio_save.svg';
   static const String stopAudioIcon = 'assets/icons/stop_audio.svg';
   static const String addIcon = 'assets/icons/add.svg';
+  static const String cameraIcon = 'assets/icons/camera.svg';
+  static const String playingIcon = 'assets/icons/playing.svg';
+  static const String tenSecondForwardIcon = 'assets/icons/10_seconds_forward.svg';
+  static const String tenSecondBackIcon = 'assets/icons/10_seconds_back.svg';
+  static const String mutedIcon = 'assets/icons/muted.svg';
+  static const String volumeLoudIcon = 'assets/icons/volume_loud.svg';
+  static const String doubleArrowUpIcon = 'assets/icons/double_arrow_up.svg';
 
   //our animations
   static const String audioAnimation = 'assets/animations/audio.json';

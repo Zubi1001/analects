@@ -1,3 +1,5 @@
+import 'package:analects/app/modules/play_analect/play_analect.dart';
+
 import '../../widgets/widget_imports.dart';
 
 class AnalectsListViewItem extends StatelessWidget {
@@ -51,7 +53,9 @@ class AnalectsListViewItem extends StatelessWidget {
                 child: PlayAndPauseButton(
                   height: 70.h,
                   width: 70.h,
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.to(() =>  PlayAnalect());
+                  },
                   isPlaying: false,
                 ),
               ),
