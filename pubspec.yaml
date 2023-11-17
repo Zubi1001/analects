@@ -48,6 +48,12 @@ dependencies:
   lottie: ^2.7.0
   dropdown_button2: ^2.0.0
   sleek_circular_slider: ^2.0.1
+  flutter_sound: ^9.2.13
+  firebase_storage: ^11.5.1
+  permission_handler: ^11.0.1
+  audio_session: ^0.1.18
+  flutter_sound_record_platform_interface: ^0.3.1
+  image_picker: ^1.0.4
   
 
 dev_dependencies:

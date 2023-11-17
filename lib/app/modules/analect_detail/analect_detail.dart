@@ -1,7 +1,9 @@
 import 'package:analects/app/modules/widgets/widget_imports.dart';
+import 'package:analects/services/image_picker_service.dart';
 
 import '../widgets/dropdown/custom_dropdown.dart';
 
+// ignore: must_be_immutable
 class AnalectDetail extends StatelessWidget {
   AnalectDetail({super.key});
 
@@ -18,8 +20,12 @@ class AnalectDetail extends StatelessWidget {
     "Health and Wellness",
   ].obs;
 
+  File? pickedFile;
+
   final confirmationCheck = false.obs;
   final audioPlayCheck = false.obs;
+
+  final controller = Get.find<CreateAnalectsController>();
 
   @override
   Widget build(BuildContext context) {
@@ -67,32 +73,38 @@ class AnalectDetail extends StatelessWidget {
                   ),
                 Stack(
                   children: [
-                    Container(
-                      width: context.width,
-                      height: 180.h,
-                      margin: EdgeInsets.symmetric(vertical: 10.h),
-                      decoration: BoxDecoration(
-                        color: AppColors.kPrimary1Color,
-                        borderRadius: BorderRadius.circular(30.r),
+                    InkWell(
+                      onTap: () {
+                        pickedFile =
+                            ImagePickerService.getImageFromGallery() as File?;
+                      },
+                      child: Container(
+                        width: context.width,
+                        height: 180.h,
+                        margin: EdgeInsets.symmetric(vertical: 10.h),
+                        decoration: BoxDecoration(
+                          color: AppColors.kPrimary1Color,
+                          borderRadius: BorderRadius.circular(30.r),
+                          image: DecorationImage(
+                              image: FileImage(pickedFile ?? File(""))),
+                        ),
+                        child: !confirmationCheck.value
+                            ? Center(
+                                child: SvgPicture.asset(
+                                  AppAssets.addIcon,
+                                  width: 40.w,
+                                  height: 40.w,
+                                ),
+                              )
+                            : null,
                       ),
-                      child: !confirmationCheck.value
-                          ? Center(
-                              child: SvgPicture.asset(
-                                AppAssets.addIcon,
-                                width: 40.w,
-                                height: 40.w,
-                              ),
-                            )
-                          : null,
                     ),
                     if (confirmationCheck.isTrue) ...[
                       Positioned(
                         bottom: 30.h,
                         right: 20.w,
                         child: InkWell(
-                          onTap: () {
-                           
-                          },
+                          onTap: () {},
                           child: SvgPicture.asset(
                             AppAssets.cameraIcon,
                             width: 30.w,
@@ -117,11 +129,11 @@ class AnalectDetail extends StatelessWidget {
                     child: Stack(
                       children: [
                         Positioned(
-                          left:80.w,
+                          left: 80.w,
                           bottom: 60.h,
                           child: SizedBox(
-                             width: 220.w,
-                              height: 60.h,
+                            width: 220.w,
+                            height: 60.h,
                             child: Lottie.asset(
                               AppAssets.audioAnimation,
                               animate: audioPlayCheck.value,
@@ -138,11 +150,16 @@ class AnalectDetail extends StatelessWidget {
                                 width: 20.w,
                               ),
                               InkWell(
-                                onTap: (){
+                                onTap: () {
                                   audioPlayCheck.value = !audioPlayCheck.value;
+                                  if (audioPlayCheck.value) {
+                                    controller.play();
+                                  } else {
+                                    controller.stopPlayer();
+                                  }
                                 },
                                 child: CircleAvatar(
-                                  backgroundColor:  AppColors.kSecondaryColor,
+                                  backgroundColor: AppColors.kSecondaryColor,
                                   child: Center(
                                     child: SvgPicture.asset(
                                       audioPlayCheck.value

@@ -32,8 +32,8 @@ class CreateAnalects extends StatelessWidget {
                       children: [
                         Lottie.asset(
                           AppAssets.audioAnimation,
-                          animate: controller.isRunning.value,
-                          repeat: controller.isRunning.value ? true : false,
+                          animate: controller.isRecording.value,
+                          repeat: controller.isRecording.value ? true : false,
                           frameRate: FrameRate.max,
                         ),
                         Text(
@@ -61,27 +61,36 @@ class CreateAnalects extends StatelessWidget {
                       SizedBox(width: 35.w),
                       GestureDetector(
                         onTap: () {
-                          controller.isRunning.value
-                              ? controller.stop()
+                          controller.isRecordingPaused.value
+                              ? controller.resume()
+                              : controller.isRecording.value 
+                              ? controller.pause()
                               : controller.start();
                         },
                         child: CircleAvatar(
-                          backgroundColor: controller.isRunning.value
+                          backgroundColor: controller.isRecording.value
                               ? AppColors.kWhiteColor.withOpacity(.3)
                               : AppColors.kSecondaryColor,
                           radius: 35.h,
                           child: Center(
                             child: SvgPicture.asset(
-                              controller.isRunning.value
+                              controller.isRecording.value
                                   ? AppAssets.stopAudioIcon
                                   : AppAssets.micIcon,
                             ),
                           ),
                         ),
                       ),
+                    
                       SizedBox(width: 35.w),
                       GestureDetector(
-                        onTap: () => Get.to(() => AnalectDetail()),
+                        onTap: () {
+                          if(controller.isRecordingPaused.value && controller.elapsedTime.value < 60){
+                            log("First You have to stop the recording");
+                          }else{
+                            Get.to(() => AnalectDetail());
+                          }
+                        },
                         child: SvgPicture.asset(
                           AppAssets.audioSaveIcon,
                           height: 30.h,
