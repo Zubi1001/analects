@@ -1,4 +1,3 @@
-import 'package:analects/controller/auth_controller.dart';
 import '../app/modules/widgets/widget_imports.dart';
 
 class UserController extends GetxController {

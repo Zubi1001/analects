@@ -1,13 +1,17 @@
 import 'package:analects/app/modules/create_analects/create_analects.dart';
 import 'package:analects/app/modules/widgets/widget_imports.dart';
+import 'package:analects/controller/creator_profile_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 
 class CreatorProfilePage extends StatelessWidget {
-  const CreatorProfilePage({super.key});
+   CreatorProfilePage({super.key});
+
+  final controller = Get.put(CreatorProfileController());
 
   @override
   Widget build(BuildContext context) {
+    print("Total analects ${controller.analectList.length}");
     return Scaffold(
       backgroundColor: AppColors.kPrimaryColor,
       appBar: CustomAppBar(
@@ -148,15 +152,19 @@ class CreatorProfilePage extends StatelessWidget {
                 SizedBox(
                   height: 25.h,
                 ),
-                ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  padding: EdgeInsets.zero,
-                  scrollDirection: Axis.vertical,
-                  itemCount: 10,
-                  itemBuilder: (context, index) {
-                    return const AnalectsListViewItem();
-                  },
+                Obx(
+                   () {
+                    return ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      padding: EdgeInsets.zero,
+                      scrollDirection: Axis.vertical,
+                      itemCount: controller.analectList.length,
+                      itemBuilder: (context, index) {
+                        return  AnalectsListViewItem(analectData: controller.analectList[index],);
+                      },
+                    );
+                  }
                 ),
               ],
             ),

@@ -1,5 +1,3 @@
-import 'package:analects/app/modules/widgets/dialogs/loader_dialog.dart';
-
 import '../app/modules/widgets/widget_imports.dart';
 
 class AuthService {
@@ -17,6 +15,7 @@ class AuthService {
       LoadingConfig.hideLoading();
     } catch (e) {
       LoadingConfig.hideLoading();
+      showErrorDialog(e.toString());
       log(e.toString());
     }
   }
@@ -37,6 +36,7 @@ class AuthService {
       });
     } catch (e) {
       LoadingConfig.hideLoading();
+      showErrorDialog(e.toString());
       log(e.toString());
     }
   }
@@ -90,6 +90,7 @@ class AuthService {
       }
     } catch (e) {
       LoadingConfig.hideLoading();
+      showErrorDialog(e.toString());
       log(e.toString());
     }
   }
@@ -100,6 +101,7 @@ class AuthService {
       await GoogleSignIn().signOut();
       Get.delete<UserController>(force: true);
     } catch (e) {
+      showErrorDialog(e.toString());
       log(e.toString());
     }
   }

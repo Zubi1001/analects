@@ -1,7 +1,9 @@
 import '../widgets/widget_imports.dart';
 
 class LandingPage extends StatelessWidget {
-  const LandingPage({super.key});
+  LandingPage({super.key});
+
+ final user = Get.find<UserController>().currentUser!;
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +18,7 @@ class LandingPage extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Hey John!', style: AppTypography.kExtraBold20),
+                    Text('Hey ${user.name}!', style: AppTypography.kExtraBold20),
                     Icon(
                       Icons.search,
                       color: Colors.white,
@@ -80,7 +82,7 @@ class LandingPage extends StatelessWidget {
                 scrollDirection: Axis.vertical,
                 itemCount: 10,
                 itemBuilder: (context, index) {
-                  return const AnalectsListViewItem();
+                  return const AnalectsListViewItem(analectData: null,);
                 },
               ),
             ],

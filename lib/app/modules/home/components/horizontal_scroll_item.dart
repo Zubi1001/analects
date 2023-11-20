@@ -11,7 +11,7 @@ class HorizontalScrollViewItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => Get.to(() => const CreatorProfilePage()),
+      onTap: () => Get.to(() =>  CreatorProfilePage()),
       child: Container(
         width: 320.h,
         margin: EdgeInsets.all(6.h),

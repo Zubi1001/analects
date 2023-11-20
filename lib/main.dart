@@ -1,4 +1,3 @@
-import 'package:analects/app/modules/widgets/dialogs/loader_dialog.dart';
 import 'package:analects/app/modules/widgets/widget_imports.dart';
 
 

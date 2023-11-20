@@ -29,7 +29,7 @@ class AuthWrapper extends StatelessWidget {
               ),
             );
           } else {
-            return const LandingPage();
+            return  LandingPage();
           }
         }
       },

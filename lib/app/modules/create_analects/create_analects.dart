@@ -1,3 +1,4 @@
+import 'package:analects/app/modules/widgets/dialogs/confirmation_dialog.dart';
 import 'package:analects/app/modules/widgets/widget_imports.dart';
 
 class CreateAnalects extends StatelessWidget {
@@ -51,7 +52,15 @@ class CreateAnalects extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       GestureDetector(
-                        onTap: () => controller.reset(),
+                        onTap: () {
+                          Get.dialog(ConfirmationDialog(
+                              onConfirm: () {
+                                controller.reset();
+                                Get.back();
+                              },
+                              confirmationText:
+                                  'Are you sure you want to discard this audio?'));
+                        },
                         child: SvgPicture.asset(
                           AppAssets.audioDiscardIcon,
                           height: 30.h,
@@ -63,10 +72,9 @@ class CreateAnalects extends StatelessWidget {
                         onTap: () {
                           controller.isRecordingPaused.value
                               ? controller.resume()
-                              :
-                          controller.isRecording.value
-                              ? controller.pause()
-                              : controller.start();
+                              : controller.isRecording.value
+                                  ? controller.pause()
+                                  : controller.start();
                         },
                         child: CircleAvatar(
                           backgroundColor: controller.isRecording.value
@@ -82,16 +90,26 @@ class CreateAnalects extends StatelessWidget {
                           ),
                         ),
                       ),
-                    
                       SizedBox(width: 35.w),
                       GestureDetector(
                         onTap: () {
-                          if(controller.isRecordingPaused.value){
-                            controller.stopRecording();
-                            Get.to(() => AnalectDetail());
-                          }else{
-                            Get.to(() => AnalectDetail());
+                          if(controller.elapsedTime.value > 0){
+                            Get.dialog(ConfirmationDialog(
+                              onConfirm: () {
+                                if (controller.isRecording.value ||
+                                    controller.isRecordingPaused.value) {
+                                  controller.stopRecording();
+                                  Get.to(() => AnalectDetail());
+                                } else {
+                                  Get.to(() => AnalectDetail());
+                                }
+                              },
+                              confirmationText:
+                                  'Are you sure you want to save this audio?'));
+                          }else {
+                            showErrorDialog('Please record something first');
                           }
+                         
                         },
                         child: SvgPicture.asset(
                           AppAssets.audioSaveIcon,

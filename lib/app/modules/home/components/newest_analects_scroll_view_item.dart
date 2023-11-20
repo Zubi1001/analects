@@ -1,9 +1,12 @@
-import 'package:analects/app/modules/play_analect/play_analect.dart';
+import 'package:analects/models/analect_model.dart';
 
 import '../../widgets/widget_imports.dart';
-
 class AnalectsListViewItem extends StatelessWidget {
-  const AnalectsListViewItem({super.key});
+  final AnalectModel? analectData;
+  const AnalectsListViewItem({super.key, required this.analectData});
+
+ 
+  AnalectModel get analectModel => analectData!;
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +35,9 @@ class AnalectsListViewItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Song name', style: AppTypography.kBold14),
+                  Text(analectModel.analectName, style: AppTypography.kBold14),
                   SizedBox(height: 10.h),
-                  Text('Title',
+                  Text(analectModel.category,
                       style: AppTypography.kExtraLight12.copyWith(
                           color: AppColors.kWhiteColor.withOpacity(0.5))),
                   SizedBox(height: 10.h),

@@ -2,6 +2,7 @@ import 'package:analects/app/modules/widgets/widget_imports.dart';
 import 'package:path_provider/path_provider.dart';
 
 class CreateAnalectsController extends GetxController {
+  
   final isRecording = false.obs;
   final isPlaying = false.obs;
   final isRecordingPaused = false.obs;
@@ -170,7 +171,6 @@ class CreateAnalectsController extends GetxController {
             codec: _codec,
             whenFinished: () {
               isPlaying.value = false;
-
               log("finished playing");
             })
         .then((value) {

@@ -27,7 +27,7 @@ class DiscoverDetailPage extends StatelessWidget {
           scrollDirection: Axis.vertical,
           itemCount: 10,
           itemBuilder: (context, index) {
-            return const AnalectsListViewItem();
+            return const AnalectsListViewItem(analectData: null,);
           },
         ),
       ),
