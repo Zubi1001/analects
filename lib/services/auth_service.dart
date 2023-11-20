@@ -1,3 +1,5 @@
+import 'package:analects/app/modules/widgets/dialogs/loader_dialog.dart';
+
 import '../app/modules/widgets/widget_imports.dart';
 
 class AuthService {
@@ -8,16 +10,20 @@ class AuthService {
 
   Future<void> signInWithEmail(
       {required String email, required String password}) async {
+    LoadingConfig.showLoading();
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
       Get.put(UserController(), permanent: true);
+      LoadingConfig.hideLoading();
     } catch (e) {
+      LoadingConfig.hideLoading();
       log(e.toString());
     }
   }
 
   Future<void> signupWithEmail(
       {required String email, required String password}) async {
+    LoadingConfig.showLoading();
     try {
       await _auth
           .createUserWithEmailAndPassword(email: email, password: password)
@@ -27,13 +33,17 @@ class AuthService {
         await db.usersCollection.doc(userModel.id).set(userModel.toMap());
         Get.put(UserController(), permanent: true);
         Get.back();
+        LoadingConfig.hideLoading();
       });
     } catch (e) {
+      LoadingConfig.hideLoading();
       log(e.toString());
     }
   }
 
   Future<void> signInWithGoogle() async {
+    LoadingConfig.showLoading();
+
     try {
       GoogleSignIn googleSignIn = GoogleSignIn(
         scopes: [
@@ -76,8 +86,10 @@ class AuthService {
         }
         Get.put(UserController(), permanent: true);
         Get.back();
+        LoadingConfig.hideLoading();
       }
     } catch (e) {
+      LoadingConfig.hideLoading();
       log(e.toString());
     }
   }

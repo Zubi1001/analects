@@ -1,4 +1,6 @@
+import 'package:analects/app/modules/widgets/dialogs/loader_dialog.dart';
 import 'package:analects/app/modules/widgets/widget_imports.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,6 +27,7 @@ class MyApp extends StatelessWidget {
               colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
               useMaterial3: true,
             ),
+            builder: EasyLoading.init(),
             home: AuthWrapper());
       },
     );

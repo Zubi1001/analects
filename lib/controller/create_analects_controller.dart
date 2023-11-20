@@ -1,15 +1,16 @@
-
 import 'package:analects/app/modules/widgets/widget_imports.dart';
-
+import 'package:path_provider/path_provider.dart';
 
 class CreateAnalectsController extends GetxController {
   final isRecording = false.obs;
+  final isPlaying = false.obs;
   final isRecordingPaused = false.obs;
   final timeLimitExceed = false.obs;
   final startTime = 0.obs;
   final elapsedTime = 0.obs;
   final Codec _codec = Codec.aacMP4;
-  final String _mPath = 'tau_file.mp4';
+  String? recordingPath;
+
 
   final FlutterSoundPlayer? _player = FlutterSoundPlayer();
   final FlutterSoundRecorder? _recorder = FlutterSoundRecorder();
@@ -42,11 +43,9 @@ class CreateAnalectsController extends GetxController {
     await session.configure(AudioSessionConfiguration(
       avAudioSessionCategory: AVAudioSessionCategory.playAndRecord,
       avAudioSessionCategoryOptions:
-          AVAudioSessionCategoryOptions.allowBluetooth |
-              AVAudioSessionCategoryOptions.defaultToSpeaker,
+          AVAudioSessionCategoryOptions.allowBluetooth | AVAudioSessionCategoryOptions.defaultToSpeaker,
       avAudioSessionMode: AVAudioSessionMode.spokenAudio,
-      avAudioSessionRouteSharingPolicy:
-          AVAudioSessionRouteSharingPolicy.defaultPolicy,
+      avAudioSessionRouteSharingPolicy: AVAudioSessionRouteSharingPolicy.defaultPolicy,
       avAudioSessionSetActiveOptions: AVAudioSessionSetActiveOptions.none,
       androidAudioAttributes: const AndroidAudioAttributes(
         contentType: AndroidAudioContentType.speech,
@@ -61,37 +60,36 @@ class CreateAnalectsController extends GetxController {
   ///START RECORDING
   Future<void> startRecording() async {
     if (!_isRecorderInitialized.value) return;
-    _recorder!
-        .startRecorder(
-      toFile: _mPath,
-      codec: _codec,
-      // audioSource: AudioSource.microphone,
-    )
-        .then((value) {
-      update();
-    });
-    Future.delayed(const Duration(minutes: 1), () async {
-      await pauseRecording();
-      isRecordingPaused.value = false;
-      print(elapsedTime.value);
-      // _player!.stopPlayer();
-      _recorder!.stopRecorder();
-      timeLimitExceed.value = true;
-      isRecording.value = false;
+    Directory tempDir = await getTemporaryDirectory();
+    String filePath = '${tempDir.path}/${DateTime.now().millisecondsSinceEpoch}.mp4';
+    _recorder!.startRecorder(toFile: filePath, codec: _codec).then((value) {
+      recordingPath = filePath;
       update();
     });
   }
 
-  ///STOP RECORDING
+  ///Pause RECORDING
   Future<void> pauseRecording() async {
     if (!_isRecorderInitialized.value) return;
     await _recorder!.pauseRecorder();
+    isRecordingPaused.value = true;
+    update();
     // await _recorder!.stopRecorder();
   }
 
-   Future<void> resumeRecording() async {
+  Future<void> stopRecording() async {
+    if (!_isRecorderInitialized.value) return;
+    await _recorder!.stopRecorder();
+    isRecording.value = false;
+    timeLimitExceed.value = true;
+    update();
+  }
+
+  Future<void> resumeRecording() async {
     if (!_isRecorderInitialized.value) return;
     await _recorder!.resumeRecorder();
+    isRecordingPaused.value = false;
+    update();
   }
 
   // @override
@@ -115,20 +113,22 @@ class CreateAnalectsController extends GetxController {
   ///Start Function
   void start() async {
     if (!isRecording.value && !timeLimitExceed.value) {
-      startTime.value =
-          DateTime.now().second - elapsedTime.value;
+      startTime.value = DateTime.now().millisecondsSinceEpoch - elapsedTime.value;
       isRecording.value = true;
       update();
       await startRecording();
+
       Timer.periodic(const Duration(seconds: 1), (timer) {
         if (isRecording.value) {
-          elapsedTime.value =
-              DateTime.now().millisecondsSinceEpoch - startTime.value;
+          elapsedTime.value = DateTime.now().millisecondsSinceEpoch - startTime.value;
           update();
+
+          if (elapsedTime.value >= const Duration(minutes: 1).inMilliseconds) {
+            timer.cancel();
+            stopRecording();
+          }
         }
       });
-    } else{
-      log("Time Limit Exceed");
     }
   }
 
@@ -152,18 +152,25 @@ class CreateAnalectsController extends GetxController {
   ///Reset Function
   void reset() {
     elapsedTime.value = 0;
+    startTime.value = 0;
     _player!.stopPlayer();
     _recorder!.stopRecorder();
     isRecording.value = false;
+    isRecordingPaused.value = false;
+    timeLimitExceed.value = false;
     update();
   }
 
   ///For player
   void play() {
+    isPlaying.value = true;
     _player!
         .startPlayer(
-            fromURI: _mPath,
+            fromURI: recordingPath,
+            codec: _codec,
             whenFinished: () {
+              isPlaying.value = false;
+
               log("finished playing");
             })
         .then((value) {
@@ -172,6 +179,7 @@ class CreateAnalectsController extends GetxController {
   }
 
   void stopPlayer() {
+    isPlaying.value = false;
     _player!.stopPlayer().then((value) {
       update();
     });

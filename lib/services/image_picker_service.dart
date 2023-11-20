@@ -1,5 +1,3 @@
-
-
 import '../app/modules/widgets/widget_imports.dart';
 
 class ImagePickerService {
@@ -51,7 +49,5 @@ class ImagePickerService {
   //     return null;
   //   }
   // }
-
-
 
 }

@@ -63,7 +63,8 @@ class CreateAnalects extends StatelessWidget {
                         onTap: () {
                           controller.isRecordingPaused.value
                               ? controller.resume()
-                              : controller.isRecording.value 
+                              :
+                          controller.isRecording.value
                               ? controller.pause()
                               : controller.start();
                         },
@@ -85,8 +86,9 @@ class CreateAnalects extends StatelessWidget {
                       SizedBox(width: 35.w),
                       GestureDetector(
                         onTap: () {
-                          if(controller.isRecordingPaused.value && controller.elapsedTime.value < 60){
-                            log("First You have to stop the recording");
+                          if(controller.isRecordingPaused.value){
+                            controller.stopRecording();
+                            Get.to(() => AnalectDetail());
                           }else{
                             Get.to(() => AnalectDetail());
                           }

@@ -1,7 +1,5 @@
 import 'package:analects/app/modules/widgets/widget_imports.dart';
-import 'package:analects/services/image_picker_service.dart';
-
-import '../widgets/dropdown/custom_dropdown.dart';
+import 'package:analects/repo/analect_repo.dart';
 
 // ignore: must_be_immutable
 class AnalectDetail extends StatelessWidget {
@@ -20,11 +18,11 @@ class AnalectDetail extends StatelessWidget {
     "Health and Wellness",
   ].obs;
 
-  File? pickedFile;
+  final pickedFile = Rxn<File?>();
 
   final confirmationCheck = false.obs;
-  final audioPlayCheck = false.obs;
-
+  final db = DatabaseService();
+  final ac = Get.find<AuthController>();
   final controller = Get.find<CreateAnalectsController>();
 
   @override
@@ -33,9 +31,7 @@ class AnalectDetail extends StatelessWidget {
       return Scaffold(
         backgroundColor: AppColors.kPrimaryColor,
         appBar: CustomAppBar(
-          title: confirmationCheck.value
-              ? _analectNameController.text
-              : "Analect Detail",
+          title: confirmationCheck.value ? _analectNameController.text : "Analect Detail",
           backgroundColor: AppColors.noColor,
           actions: const [],
           onBack: () {
@@ -49,8 +45,40 @@ class AnalectDetail extends StatelessWidget {
         bottomNavigationBar: Padding(
           padding: EdgeInsets.symmetric(horizontal: 30.w, vertical: 20),
           child: CustomButton(
-            onTap: () {
-              confirmationCheck.value = true;
+            onTap: () async {
+              if (!confirmationCheck.value) {
+                if(pickedFile.value == null){
+                  log("image required");
+                }
+                else if(_analectNameController.text == ""){
+                  log("Name Required");
+                }else if(selectedCategory.value == null) {
+                  log("select Category");
+                }else {
+                  confirmationCheck.value = true;
+                }
+              } else {
+
+                await AnalectsRepo().postAnalects(
+                    audioFilePath: controller.recordingPath!,
+                    analectImage: pickedFile.value!,
+                    category: selectedCategory.value!,
+                    analectName: _analectNameController.text,);
+                // LoadingConfig.showLoading();
+                // log(controller.recordingPath.toString());
+                //  final file = File(controller.recordingPath!);
+                //  final url = await FirebaseStorageService.uploadToStorage(file: file, folderName: 'analects/${ac.user!.uid}');
+                // final imageUrl = await FirebaseStorageService.uploadToStorage(file: pickedFile.value!, folderName: 'analects/${ac.user!.uid}',imageName: "analectsPic");
+                //  await db.analectsCollection.doc(ac.user!.uid).set({
+                //    "url" : url,
+                //    "image" : imageUrl,
+                //    "category": selectedCategory.value,
+                //    "name": _analectNameController.text,
+                // });
+                // LoadingConfig.hideLoading();
+                Get.offUntil(GetPageRoute(page: () => CreatorProfilePage()),
+                    (route) => (route as GetPageRoute).routeName == '/CreateProfilePage');
+              }
             },
             text: confirmationCheck.value ? "Post " : "Confirm",
             height: 60.h,
@@ -74,9 +102,9 @@ class AnalectDetail extends StatelessWidget {
                 Stack(
                   children: [
                     InkWell(
-                      onTap: () {
-                        pickedFile =
-                            ImagePickerService.getImageFromGallery() as File?;
+                      onTap: () async {
+                        pickedFile.value = await ImagePickerService.getImageFromGallery();
+                        // image.value = pickedFile!.path;
                       },
                       child: Container(
                         width: context.width,
@@ -85,10 +113,9 @@ class AnalectDetail extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: AppColors.kPrimary1Color,
                           borderRadius: BorderRadius.circular(30.r),
-                          image: DecorationImage(
-                              image: FileImage(pickedFile ?? File(""))),
+                          image: DecorationImage(image: FileImage(pickedFile.value ?? File(""))),
                         ),
-                        child: !confirmationCheck.value
+                        child: pickedFile.value == null
                             ? Center(
                                 child: SvgPicture.asset(
                                   AppAssets.addIcon,
@@ -99,7 +126,7 @@ class AnalectDetail extends StatelessWidget {
                             : null,
                       ),
                     ),
-                    if (confirmationCheck.isTrue) ...[
+                    if (pickedFile.value != null) ...[
                       Positioned(
                         bottom: 30.h,
                         right: 20.w,
@@ -136,8 +163,8 @@ class AnalectDetail extends StatelessWidget {
                             height: 60.h,
                             child: Lottie.asset(
                               AppAssets.audioAnimation,
-                              animate: audioPlayCheck.value,
-                              repeat: audioPlayCheck.value ? true : false,
+                              animate: controller.isPlaying.value,
+                              repeat: controller.isPlaying.value ? true : false,
                               fit: BoxFit.fitWidth,
                               frameRate: FrameRate.max,
                             ),
@@ -151,8 +178,8 @@ class AnalectDetail extends StatelessWidget {
                               ),
                               InkWell(
                                 onTap: () {
-                                  audioPlayCheck.value = !audioPlayCheck.value;
-                                  if (audioPlayCheck.value) {
+                                  controller.isPlaying.value = !controller.isPlaying.value;
+                                  if (controller.isPlaying.value) {
                                     controller.play();
                                   } else {
                                     controller.stopPlayer();
@@ -162,8 +189,7 @@ class AnalectDetail extends StatelessWidget {
                                   backgroundColor: AppColors.kSecondaryColor,
                                   child: Center(
                                     child: SvgPicture.asset(
-                                      audioPlayCheck.value
-                                          ? AppAssets.playingIcon
+                                      controller.isPlaying.value ? AppAssets.playingIcon
                                           : AppAssets.pauseButton,
                                       width: 16.w,
                                       height: 16.w,
