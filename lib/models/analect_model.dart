@@ -11,6 +11,8 @@ class AnalectModel {
   String audioUrl;
   String noOfListen;
   String noOfView;
+
+  
   AnalectModel({
     required this.analectId,
     required this.creatorId,

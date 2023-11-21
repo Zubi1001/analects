@@ -1,3 +1,5 @@
+import 'package:analects/app/data/contents/app_analect_categories.dart';
+import 'package:analects/app/modules/home/components/catagories_scroll_view_item.dart';
 import 'package:analects/controller/home_controller.dart';
 
 import '../widgets/widget_imports.dart';
@@ -5,9 +7,9 @@ import '../widgets/widget_imports.dart';
 class LandingPage extends StatelessWidget {
   LandingPage({super.key});
 
- final _user = Get.find<UserController>().currentUser!;
- String? get userName => _user.name;
- final controller = Get.put(HomeController());
+  final _user = Get.find<UserController>().currentUser!;
+  String? get userName => _user.name;
+  final controller = Get.put(HomeController());
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +24,8 @@ class LandingPage extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Hey ${userName == "" ? "User": userName}!', style: AppTypography.kExtraBold20),
+                    Text('Hey ${userName == "" ? "User" : userName}!',
+                        style: AppTypography.kExtraBold20),
                     Icon(
                       Icons.search,
                       color: Colors.white,
@@ -38,7 +41,7 @@ class LandingPage extends StatelessWidget {
                   children: [
                     Text('Top Creators', style: AppTypography.kExtraBold20),
                     InkWell(
-                      onTap: () => Get.to(() => const Discover()),
+                      onTap: () => Get.to(() =>  Discover()),
                       child: Text('See All',
                           style: AppTypography.specialTextStyle),
                     ),
@@ -50,9 +53,22 @@ class LandingPage extends StatelessWidget {
                 padding: EdgeInsets.only(
                   left: 10.w,
                 ),
-                child: HorizontalScrollView(
-                  topLabelCheck: true,
-                ),
+                child: Obx(() {
+                  return SizedBox(
+                    height: 230.h,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      shrinkWrap: true,
+                      itemCount: controller.topCreatorList.length,
+                      itemBuilder: (context, index) {
+                        return HorizontalScrollViewItem(
+                          labelButtonCheck: true,
+                          creatorData: controller.topCreatorList[index]!,
+                        );
+                      },
+                    ),
+                  );
+                }),
               ),
               SizedBox(height: 20.h),
               Padding(
@@ -65,10 +81,20 @@ class LandingPage extends StatelessWidget {
               ),
               SizedBox(height: 20.h),
               Padding(
-                  padding: EdgeInsets.only(
-                    left: 10.w,
+                padding: EdgeInsets.only(
+                  left: 10.w,
+                ),
+                child: SizedBox(
+                  height: 80.h,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: AnalectCategories.values.length,
+                    itemBuilder: (context, index) {
+                      return  CatagoriesScrollViewItem(category: AnalectCategories.values[index].name,);
+                    },
                   ),
-                  child: const CatagoriesScrollView()),
+                ),
+              ),
               SizedBox(height: 20.h),
               Padding(
                 padding: EdgeInsets.only(left: 20.w),
@@ -79,20 +105,20 @@ class LandingPage extends StatelessWidget {
                   ],
                 ),
               ),
-              Obx(
-                () {
-                  return ListView.builder(
-                    padding: EdgeInsets.symmetric(horizontal: 20.w),
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    scrollDirection: Axis.vertical,
-                    itemCount: controller.newestAnalectList.length,
-                    itemBuilder: (context, index) {
-                      return AnalectsListViewItem(analectData: controller.newestAnalectList[index],);
-                    },
-                  );
-                }
-              ),
+              Obx(() {
+                return ListView.builder(
+                  padding: EdgeInsets.symmetric(horizontal: 20.w),
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  scrollDirection: Axis.vertical,
+                  itemCount: controller.newestAnalectList.length,
+                  itemBuilder: (context, index) {
+                    return AnalectsListViewItem(
+                      analectData: controller.newestAnalectList[index],
+                    );
+                  },
+                );
+              }),
             ],
           ),
         ),

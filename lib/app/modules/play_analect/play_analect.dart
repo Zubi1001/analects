@@ -150,7 +150,7 @@ class PlayAnalect extends StatelessWidget {
                       child: RichText(
                         text: TextSpan(children: [
                           TextSpan(
-                            text: "00:00",
+                            text: playerController.playerdisplayTime,
                             style: AppTypography.kBold16
                                 .copyWith(color: AppColors.kWhiteColor),
                           ),

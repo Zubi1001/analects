@@ -23,10 +23,10 @@ class AnalectsListViewItem extends StatelessWidget {
                 height: 80.h,
                 width: 90.w,
                 decoration: BoxDecoration(
-                    color: AppColors.kWhiteColor,
+                    color: AppColors.kPrimary1Color,
                     borderRadius: BorderRadius.circular(23.r),
-                    image: const DecorationImage(
-                      image: AssetImage(AppAssets.analectsImage),
+                    image:  DecorationImage(
+                      image: CachedNetworkImageProvider(analectModel.image),
                       fit: BoxFit.fill,
                     )),
               ),

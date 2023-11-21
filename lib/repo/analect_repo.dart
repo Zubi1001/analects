@@ -53,7 +53,7 @@ class AnalectsRepo {
             noOfListen: '',
             noOfView: '');
 
-        await _db.usersCollection.doc(value.id).update(analectModel1.toMap());
+        await _db.analectsCollection.doc(value.id).update(analectModel1.toMap());
       });
       LoadingConfig.hideLoading();
     } catch (e) {

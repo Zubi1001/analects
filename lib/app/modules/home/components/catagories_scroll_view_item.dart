@@ -1,23 +1,29 @@
-import 'package:analects/app/data/contents/app_colors.dart';
-import 'package:analects/app/data/contents/app_typography.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:analects/app/modules/widgets/widget_imports.dart';
+
 
 class CatagoriesScrollViewItem extends StatelessWidget {
-  const CatagoriesScrollViewItem({super.key});
-
+  final String category;
+  const CatagoriesScrollViewItem({required this.category, super.key});
+  
+  String get _category => category;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      margin: EdgeInsets.all(6.h),
-      width: 120.w,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20.r),
-        color: AppColors.kWhiteColor.withOpacity(0.1),
+    return GestureDetector(
+      onTap: (){
+        Get.to(() => DiscoverDetailPage(title: _category));
+      },
+      child: Container(
+        alignment: Alignment.center,
+        margin: EdgeInsets.all(6.h),
+        padding: EdgeInsets.symmetric(horizontal: 25.w),
+        
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20.r),
+          color: AppColors.kWhiteColor.withOpacity(0.1),
+        ),
+        height: 80.h,
+        child:  Text(_category.capitalize.toString(), style: AppTypography.kBold14),
       ),
-      height: 80.h,
-      child:  Text('Marketing', style: AppTypography.kBold14),
     );
   }
 }

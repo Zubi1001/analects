@@ -27,9 +27,15 @@ class AuthService {
       await _auth
           .createUserWithEmailAndPassword(email: email, password: password)
           .then((value) async {
-        final userModel =
-            UserModel(id: value.user!.uid, email: email, name: "");
-        await db.usersCollection.doc(userModel.id).set(userModel.toMap());
+        final userModel = UserModel(
+            id: value.user!.uid,
+            email: email,
+            name: "",
+            creator: false,
+            analects: '',
+            category: '',
+            );
+        await db.userCollection.doc(userModel.id).set(userModel);
         Get.put(UserController(), permanent: true);
         Get.back();
         LoadingConfig.hideLoading();
@@ -68,18 +74,21 @@ class AuthService {
       final user = userCredentials.user;
       log("userData  $user");
       if (user != null) {
-        final doc = await db.usersCollection.doc(user.uid).get();
+        final doc = await db.userCollection.doc(user.uid).get();
         if (!doc.exists) {
           final userModel = UserModel(
             id: user.uid,
             name: user.displayName ?? "",
             email: user.email ?? "",
             profileImage: user.photoURL ?? "",
+            creator: false,
+            analects: '',
+            category: '',
           );
           log("userData ${userModel.toMap().toString()}");
-          await db.usersCollection
+          await db.userCollection
               .doc(user.uid)
-              .set(userModel.toMap())
+              .set(userModel)
               .then((value) {
             log("user data successfully added");
           });

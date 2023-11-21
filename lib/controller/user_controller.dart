@@ -5,13 +5,16 @@ class UserController extends GetxController {
   final _ac = Get.find<AuthController>();
   final Rxn<UserModel?> _firebaseUser = Rxn<UserModel?>();
   UserModel? get currentUser => _firebaseUser.value;
-  DocumentReference get userReference => db.usersCollection.doc(_ac.user!.uid);
+  // DocumentReference get userReference => db.userCollection.doc(_ac.user!.uid);
 
   Stream<UserModel?> get _currentUserStream {
     log("uid is ${_ac.user!.uid}");
-    return userReference.snapshots().map((snapshot) =>
-        UserModel.fromMap(snapshot.data()! as Map<String, dynamic>),);
+    return db.userCollection.doc(_ac.user!.uid).snapshots().map((event) {
+      return event.data()!;
+    });
   }
+
+
 
   @override
   void onInit() {

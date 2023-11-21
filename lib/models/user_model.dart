@@ -6,12 +6,18 @@ class UserModel {
   String email;
   String profileImage;
   String name;
+  bool creator;
+  String analects;
+  String category;
 
   UserModel({
     required this.id,
     required this.email,
     this.profileImage = "",
     required this.name,
+    required this.creator,
+    required this.analects,
+    required this.category,
   });
 
   Map<String, dynamic> toMap() {
@@ -20,6 +26,9 @@ class UserModel {
       'email': email,
       'profileImage': profileImage,
       'name': name,
+      'creator': creator,
+      'analects': analects,
+      'category': category,
     };
   }
 
@@ -29,6 +38,9 @@ class UserModel {
       email: map['email'] as String,
       profileImage: map['profileImage'] as String,
       name: map['name'] as String,
+      creator: map['creator'] as bool,
+      analects: map['analects'] as String,
+      category: map['category'] as String,
     );
   }
 
@@ -42,18 +54,24 @@ class UserModel {
     String? email,
     String? profileImage,
     String? name,
+    bool? creator,
+    String? analects,
+    String? category,
   }) {
     return UserModel(
       id: id ?? this.id,
       email: email ?? this.email,
       profileImage: profileImage ?? this.profileImage,
       name: name ?? this.name,
+      creator: creator ?? this.creator,
+      analects: analects ?? this.analects,
+      category: category ?? this.category,
     );
   }
 
   @override
   String toString() {
-    return 'UserModel(id: $id, email: $email, profileImage: $profileImage, name: $name)';
+    return 'UserModel(id: $id, email: $email, profileImage: $profileImage, name: $name, creator: $creator, analects: $analects, category: $category)';
   }
 
   @override
@@ -64,7 +82,10 @@ class UserModel {
       other.id == id &&
       other.email == email &&
       other.profileImage == profileImage &&
-      other.name == name;
+      other.name == name &&
+      other.creator == creator &&
+      other.analects == analects &&
+      other.category == category;
   }
 
   @override
@@ -72,6 +93,9 @@ class UserModel {
     return id.hashCode ^
       email.hashCode ^
       profileImage.hashCode ^
-      name.hashCode;
+      name.hashCode ^
+      creator.hashCode ^
+      analects.hashCode ^
+      category.hashCode;
   }
 }
