@@ -1,9 +1,13 @@
+import 'package:analects/controller/home_controller.dart';
+
 import '../widgets/widget_imports.dart';
 
 class LandingPage extends StatelessWidget {
   LandingPage({super.key});
 
- final user = Get.find<UserController>().currentUser!;
+ final _user = Get.find<UserController>().currentUser!;
+ String? get userName => _user.name;
+ final controller = Get.put(HomeController());
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +22,7 @@ class LandingPage extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Hey ${user.name}!', style: AppTypography.kExtraBold20),
+                    Text('Hey ${userName == "" ? "User": userName}!', style: AppTypography.kExtraBold20),
                     Icon(
                       Icons.search,
                       color: Colors.white,
@@ -75,15 +79,19 @@ class LandingPage extends StatelessWidget {
                   ],
                 ),
               ),
-              ListView.builder(
-                padding: EdgeInsets.symmetric(horizontal: 20.w),
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                scrollDirection: Axis.vertical,
-                itemCount: 10,
-                itemBuilder: (context, index) {
-                  return const AnalectsListViewItem(analectData: null,);
-                },
+              Obx(
+                () {
+                  return ListView.builder(
+                    padding: EdgeInsets.symmetric(horizontal: 20.w),
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    scrollDirection: Axis.vertical,
+                    itemCount: controller.newestAnalectList.length,
+                    itemBuilder: (context, index) {
+                      return AnalectsListViewItem(analectData: controller.newestAnalectList[index],);
+                    },
+                  );
+                }
               ),
             ],
           ),

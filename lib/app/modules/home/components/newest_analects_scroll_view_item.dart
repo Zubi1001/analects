@@ -41,15 +41,12 @@ class AnalectsListViewItem extends StatelessWidget {
                       style: AppTypography.kExtraLight12.copyWith(
                           color: AppColors.kWhiteColor.withOpacity(0.5))),
                   SizedBox(height: 10.h),
-                  Text('Singer name',
+                  Text(analectModel.creatorName,
                       style: AppTypography.kExtraLight12
                           .copyWith(color: AppColors.kWhiteColor)),
                 ],
               ),
-              Spacer(),
-              // SizedBox(
-              //   width: 80.w,
-              // ),
+              const Spacer(),
               SizedBox(
                 width: 40.w,
                 height: 40.h,
@@ -57,7 +54,7 @@ class AnalectsListViewItem extends StatelessWidget {
                   height: 70.h,
                   width: 70.h,
                   onPressed: () {
-                    Get.to(() =>  PlayAnalect());
+                    Get.to(() =>  PlayAnalect(audioFileUrl: analectData!.audioUrl,));
                   },
                   isPlaying: false,
                 ),

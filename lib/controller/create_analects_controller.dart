@@ -163,11 +163,11 @@ class CreateAnalectsController extends GetxController {
   }
 
   ///For player
-  void play() {
+  void play({String? audioUrl}) {
     isPlaying.value = true;
     _player!
         .startPlayer(
-            fromURI: recordingPath,
+            fromURI: audioUrl ?? recordingPath,
             codec: _codec,
             whenFinished: () {
               isPlaying.value = false;

@@ -3,7 +3,7 @@ import 'package:analects/models/analect_model.dart';
 
 class AnalectsRepo {
   final _db = DatabaseService();
-  String get _currentUid => Get.find<UserController>().currentUser!.id;
+  UserModel? get _currentUser => Get.find<UserController>().currentUser!;
 
   Future<void> postAnalects(
       {required String audioFilePath,
@@ -14,14 +14,15 @@ class AnalectsRepo {
     try {
       final file = File(audioFilePath);
       final audioUrl = await FirebaseStorageService.uploadToStorage(
-          file: file, folderName: 'analects/$_currentUid');
+          file: file, folderName: 'analects/${_currentUser!.id}');
       final imageUrl = await FirebaseStorageService.uploadToStorage(
           file: analectImage,
-          folderName: 'analects/$_currentUid',
+          folderName: 'analects/${_currentUser!.id}',
           imageName: "analects_cover");
       final analectModel = AnalectModel(
           analectId: "",
-          creatorId: _currentUid,
+          creatorId: _currentUser!.id,
+          creatorName: _currentUser!.name,
           analectName: analectName,
           category: category,
           image: imageUrl,
@@ -43,7 +44,8 @@ class AnalectsRepo {
         log("tempId is $tempId");
         final analectModel1 = AnalectModel(
             analectId: value.id,
-            creatorId: _currentUid,
+            creatorId: _currentUser!.id,
+            creatorName: _currentUser!.name,
             analectName: analectName,
             category: category,
             image: imageUrl,

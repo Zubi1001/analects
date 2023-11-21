@@ -3,9 +3,9 @@ import 'package:analects/models/analect_model.dart';
 
 class CreatorProfileController extends GetxController {
   final user = Get.find<UserController>().currentUser;
-   final _analectList = Rx<List<AnalectModel?>>([]);
+   final _creatorAnalectList = Rx<List<AnalectModel?>>([]);
 
-  List<AnalectModel?> get analectList => _analectList.value;
+  List<AnalectModel?> get analectList => _creatorAnalectList.value;
   final _db = DatabaseService();
 
 
@@ -20,13 +20,13 @@ class CreatorProfileController extends GetxController {
 
   @override
   void onInit() {
-    _analectList.bindStream(_creatorsAnalects());
+    _creatorAnalectList.bindStream(_creatorsAnalects());
     super.onInit();
   }
  
  @override
   void onClose() {
-    _analectList.close();
+    _creatorAnalectList.close();
     super.onClose();
   }
 }

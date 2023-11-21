@@ -4,6 +4,7 @@ import 'dart:convert';
 class AnalectModel {
   String analectId;
   String creatorId;
+  String creatorName;
   String analectName;
   String category;
   String image;
@@ -13,6 +14,7 @@ class AnalectModel {
   AnalectModel({
     required this.analectId,
     required this.creatorId,
+    required this.creatorName,
     required this.analectName,
     required this.category,
     required this.image,
@@ -24,6 +26,7 @@ class AnalectModel {
   AnalectModel copyWith({
     String? analectId,
     String? creatorId,
+    String? creatorName,
     String? analectName,
     String? category,
     String? image,
@@ -34,6 +37,7 @@ class AnalectModel {
     return AnalectModel(
       analectId: analectId ?? this.analectId,
       creatorId: creatorId ?? this.creatorId,
+      creatorName: creatorName ?? this.creatorName,
       analectName: analectName ?? this.analectName,
       category: category ?? this.category,
       image: image ?? this.image,
@@ -47,6 +51,7 @@ class AnalectModel {
     return <String, dynamic>{
       'analectId': analectId,
       'creatorId': creatorId,
+      'creatorName': creatorName,
       'analectName': analectName,
       'category': category,
       'image': image,
@@ -60,6 +65,7 @@ class AnalectModel {
     return AnalectModel(
       analectId: map['analectId'] as String,
       creatorId: map['creatorId'] as String,
+      creatorName: map['creatorName'] as String,
       analectName: map['analectName'] as String,
       category: map['category'] as String,
       image: map['image'] as String,
@@ -75,7 +81,7 @@ class AnalectModel {
 
   @override
   String toString() {
-    return 'AnalectModel(analectId: $analectId, creatorId: $creatorId, analectName: $analectName, category: $category, image: $image, audioUrl: $audioUrl, noOfListen: $noOfListen, noOfView: $noOfView)';
+    return 'AnalectModel(analectId: $analectId, creatorId: $creatorId,creatorName: $creatorName, analectName: $analectName, category: $category, image: $image, audioUrl: $audioUrl, noOfListen: $noOfListen, noOfView: $noOfView)';
   }
 
   @override
@@ -85,6 +91,7 @@ class AnalectModel {
     return 
       other.analectId == analectId &&
       other.creatorId == creatorId &&
+      other.creatorName == creatorName &&
       other.analectName == analectName &&
       other.category == category &&
       other.image == image &&
@@ -97,6 +104,7 @@ class AnalectModel {
   int get hashCode {
     return analectId.hashCode ^
       creatorId.hashCode ^
+      creatorName.hashCode ^
       analectName.hashCode ^
       category.hashCode ^
       image.hashCode ^

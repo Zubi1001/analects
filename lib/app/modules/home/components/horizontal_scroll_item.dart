@@ -65,7 +65,7 @@ class HorizontalScrollViewItem extends StatelessWidget {
               right: 20.w,
               child: PlayAndPauseButton(
                 onPressed: () {
-                  Get.to(() =>  PlayAnalect());
+                  Get.to(() =>  PlayAnalect(audioFileUrl: '',));
                 },
                 isPlaying: false,
               ),

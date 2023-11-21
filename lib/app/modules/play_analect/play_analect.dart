@@ -3,8 +3,10 @@ import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 import '../widgets/widget_imports.dart';
 
 class PlayAnalect extends StatelessWidget {
-  PlayAnalect({super.key});
+  final String audioFileUrl;
+  PlayAnalect({super.key, required this.audioFileUrl});
 
+  final playerController = Get.put(CreateAnalectsController());
   final volume = 70.obs;
   final isPlaying = false.obs;
 
@@ -121,8 +123,8 @@ class PlayAnalect extends StatelessWidget {
                   children: [
                     Lottie.asset(
                       AppAssets.audioAnimation,
-                      animate: isPlaying.value,
-                      repeat: isPlaying.value ? true : false,
+                      animate: playerController.isPlaying.value,
+                      repeat: playerController.isPlaying.value ? true : false,
                       frameRate: FrameRate.max,
                     ),
                     Positioned(
@@ -172,16 +174,17 @@ class PlayAnalect extends StatelessWidget {
                     ),
                     GestureDetector(
                       onTap: () {
-                        isPlaying.value = !isPlaying.value;
+                        playerController.isPlaying.value = !playerController.isPlaying.value;
+                        playerController.play(audioUrl: audioFileUrl);
                       },
                       child: CircleAvatar(
-                        backgroundColor: isPlaying.value
+                        backgroundColor: playerController.isPlaying.value
                             ? AppColors.kWhiteColor.withOpacity(.3)
                             : AppColors.kSecondaryColor,
                         radius: 40.h,
                         child: Center(
                           child: SvgPicture.asset(
-                            isPlaying.value
+                            playerController. isPlaying.value
                                 ? AppAssets.stopAudioIcon
                                 : AppAssets.pauseButton,
                             width: 24.w,
