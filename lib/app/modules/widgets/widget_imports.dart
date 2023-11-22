@@ -21,6 +21,7 @@ export 'package:flutter_sound/flutter_sound.dart';
 export 'package:permission_handler/permission_handler.dart';
 export 'package:flutter_easyloading/flutter_easyloading.dart';
 export 'package:cached_network_image/cached_network_image.dart';
+export 'package:firebase_storage/firebase_storage.dart';
 
 
 

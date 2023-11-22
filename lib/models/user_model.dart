@@ -9,6 +9,10 @@ class UserModel {
   bool creator;
   String analects;
   String category;
+  String creatorBio;
+  String followers;
+  String noOfListener;
+  String noOfSubscribers;
 
   UserModel({
     required this.id,
@@ -18,6 +22,10 @@ class UserModel {
     required this.creator,
     required this.analects,
     required this.category,
+    required this.creatorBio,
+    required this.followers,
+    required this.noOfListener,
+    required this.noOfSubscribers,
   });
 
   Map<String, dynamic> toMap() {
@@ -29,6 +37,10 @@ class UserModel {
       'creator': creator,
       'analects': analects,
       'category': category,
+      'creatorBio': creatorBio,
+      'followers': followers,
+      'noOfListener': noOfListener,
+      'noOfSubscribers': noOfSubscribers,
     };
   }
 
@@ -41,6 +53,10 @@ class UserModel {
       creator: map['creator'] as bool,
       analects: map['analects'] as String,
       category: map['category'] as String,
+      creatorBio: map['creatorBio'] as String,
+      followers: map['followers'] as String,
+      noOfListener: map['noOfListener'] as String,
+      noOfSubscribers: map['noOfSubscribers'] as String,
     );
   }
 
@@ -57,6 +73,10 @@ class UserModel {
     bool? creator,
     String? analects,
     String? category,
+    String? creatorBio,
+    String? followers,
+    String? noOfListener,
+    String? noOfSubscribers,
   }) {
     return UserModel(
       id: id ?? this.id,
@@ -66,12 +86,16 @@ class UserModel {
       creator: creator ?? this.creator,
       analects: analects ?? this.analects,
       category: category ?? this.category,
+      creatorBio: creatorBio ?? this.creatorBio,
+      followers: followers ?? this.followers,
+      noOfListener: noOfListener ?? this.noOfListener,
+      noOfSubscribers: noOfSubscribers ?? this.noOfSubscribers,
     );
   }
 
   @override
   String toString() {
-    return 'UserModel(id: $id, email: $email, profileImage: $profileImage, name: $name, creator: $creator, analects: $analects, category: $category)';
+    return 'UserModel(id: $id, email: $email, profileImage: $profileImage, name: $name, creator: $creator, analects: $analects, category: $category, creatorBio: $creatorBio, followers: $followers, noOfListener: $noOfListener, noOfSubscribers: $noOfSubscribers)';
   }
 
   @override
@@ -85,7 +109,11 @@ class UserModel {
       other.name == name &&
       other.creator == creator &&
       other.analects == analects &&
-      other.category == category;
+      other.category == category &&
+      other.creatorBio == creatorBio &&
+      other.followers == followers &&
+      other.noOfListener == noOfListener &&
+      other.noOfSubscribers == noOfSubscribers;
   }
 
   @override
@@ -96,6 +124,10 @@ class UserModel {
       name.hashCode ^
       creator.hashCode ^
       analects.hashCode ^
-      category.hashCode;
+      category.hashCode ^
+      creatorBio.hashCode ^
+      followers.hashCode ^
+      noOfListener.hashCode ^
+      noOfSubscribers.hashCode;
   }
 }

@@ -1,5 +1,6 @@
 import 'package:analects/app/data/contents/app_analect_categories.dart';
 import 'package:analects/app/modules/home/components/catagories_scroll_view_item.dart';
+import 'package:analects/app/modules/setting/setting_page.dart';
 import 'package:analects/controller/home_controller.dart';
 
 import '../widgets/widget_imports.dart';
@@ -24,8 +25,13 @@ class LandingPage extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Hey ${userName == "" ? "User" : userName}!',
-                        style: AppTypography.kExtraBold20),
+                    InkWell(
+                      onTap: (){
+                        Get.to(() => SettingPage());
+                      },
+                      child: Text('Hey ${userName == "" ? "User" : userName}!',
+                          style: AppTypography.kExtraBold20),
+                    ),
                     Icon(
                       Icons.search,
                       color: Colors.white,

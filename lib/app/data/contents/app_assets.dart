@@ -26,6 +26,9 @@ class AppAssets {
   static const String mutedIcon = 'assets/icons/muted.svg';
   static const String volumeLoudIcon = 'assets/icons/volume_loud.svg';
   static const String doubleArrowUpIcon = 'assets/icons/double_arrow_up.svg';
+  static const String editIcon = 'assets/icons/edit.svg';
+  static const String notificationIcon = 'assets/icons/notification.svg';
+  static const String crownIcon = 'assets/icons/crown.svg';
 
   //our animations
   static const String audioAnimation = 'assets/animations/audio.json';

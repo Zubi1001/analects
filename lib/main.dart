@@ -1,6 +1,5 @@
 import 'package:analects/app/modules/widgets/widget_imports.dart';
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -20,14 +19,16 @@ class MyApp extends StatelessWidget {
       builder: (_, child) {
         Get.put<AuthController>(AuthController(), permanent: true);
         return GetMaterialApp(
-            title: 'Analects',
-            debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-              colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-              useMaterial3: true,
-            ),
-            builder: EasyLoading.init(),
-            home: AuthWrapper());
+          title: 'Analects',
+          // getPages: routes,
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+            useMaterial3: true,
+          ),
+          builder: EasyLoading.init(),
+          home: AuthWrapper(),
+        );
       },
     );
   }
