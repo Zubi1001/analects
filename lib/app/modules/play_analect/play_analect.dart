@@ -1,17 +1,39 @@
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 
+import '../../../models/analect_model.dart';
 import '../widgets/widget_imports.dart';
 
-class PlayAnalect extends StatelessWidget {
-  final String audioFileUrl;
-  PlayAnalect({super.key, required this.audioFileUrl});
+class PlayAnalect extends StatefulWidget {
+  final AnalectModel analectData;
+  PlayAnalect({super.key, required this.analectData});
 
+  @override
+  State<PlayAnalect> createState() => _PlayAnalectState();
+}
+
+class _PlayAnalectState extends State<PlayAnalect> {
   final playerController = Get.put(CreateAnalectsController());
+
   final volume = 70.obs;
+
   final isPlaying = false.obs;
+  final audioDuration = "00:00".obs;
+
+  @override
+   initState() {
+    onInit();
+    super.initState();
+    
+    }
+
+
+  onInit() async {
+    audioDuration.value = await playerController.getAudioDuration(widget.analectData.audioUrl);
+  }
 
   @override
   Widget build(BuildContext context) {
+   
     return Obx(
       () {
         return Scaffold(
@@ -42,9 +64,8 @@ class PlayAnalect extends StatelessWidget {
                         child: CircleAvatar(
                           radius: 100.w,
                           backgroundColor: AppColors.kSecondaryColor,
-                          backgroundImage: const AssetImage(
-                            AppAssets.creatorImage,
-                          ),
+                          backgroundImage: CachedNetworkImageProvider(
+                              widget.analectData.image),
                         ),
                       ),
                       Transform.scale(
@@ -56,12 +77,11 @@ class PlayAnalect extends StatelessWidget {
                               progressBarColor: AppColors.kSecondaryColor,
                             ),
                             size: 245.w,
-                            startAngle:
-                                360,
+                            startAngle: 360,
                             angleRange: 180,
                             customWidths: CustomSliderWidths(
-                              progressBarWidth: 10.w,
-                              trackWidth: 10.w,
+                              progressBarWidth: 15.w,
+                              trackWidth: 15.w,
                             ),
                             infoProperties: InfoProperties(
                               mainLabelStyle: AppTypography.kBold16.copyWith(
@@ -78,7 +98,7 @@ class PlayAnalect extends StatelessWidget {
                           max: 100,
                           initialValue: volume.value.toDouble(),
                           onChange: (value) {
-                            volume.value = value.toInt();
+                            // volume.value = value.toInt();
                           },
                         ),
                       ),
@@ -117,7 +137,6 @@ class PlayAnalect extends StatelessWidget {
                     ],
                   ),
                 ),
-              
                 Stack(
                   alignment: Alignment.center,
                   children: [
@@ -155,7 +174,7 @@ class PlayAnalect extends StatelessWidget {
                                 .copyWith(color: AppColors.kWhiteColor),
                           ),
                           TextSpan(
-                            text: " /00:00",
+                            text: " / $audioDuration",
                             style: AppTypography.kBold14.copyWith(
                                 fontSize: 13,
                                 color: AppColors.kWhiteColor.withOpacity(.3)),
@@ -174,8 +193,14 @@ class PlayAnalect extends StatelessWidget {
                     ),
                     GestureDetector(
                       onTap: () {
-                        playerController.isPlaying.value = !playerController.isPlaying.value;
-                        playerController.play(audioUrl: audioFileUrl);
+                        playerController.isPlayingPaused.value
+                            ? playerController.resumePlayer()
+                            : playerController.isPlaying.value
+                                ? playerController.pausePlayer()
+                                :playerController.isPlayingFinished.value?playerController.playPlayer(
+                                    audioUrl: widget.analectData.audioUrl): playerController.playPlayer(
+                                    audioUrl: widget.analectData.audioUrl);
+                        
                       },
                       child: CircleAvatar(
                         backgroundColor: playerController.isPlaying.value
@@ -184,7 +209,7 @@ class PlayAnalect extends StatelessWidget {
                         radius: 40.h,
                         child: Center(
                           child: SvgPicture.asset(
-                            playerController. isPlaying.value
+                            playerController.isPlaying.value
                                 ? AppAssets.stopAudioIcon
                                 : AppAssets.pauseButton,
                             width: 24.w,
@@ -196,7 +221,9 @@ class PlayAnalect extends StatelessWidget {
                     SizedBox(
                       width: 20.w,
                     ),
-                    SvgPicture.asset(AppAssets.tenSecondForwardIcon),
+                    InkWell(onTap:(){
+                      playerController.increment10Sec();
+                    }, child:SvgPicture.asset(AppAssets.tenSecondForwardIcon)),
                   ],
                 ),
                 SizedBox(
@@ -210,7 +237,9 @@ class PlayAnalect extends StatelessWidget {
                         color: AppColors.kWhiteColor.withOpacity(.3),
                       ),
                     ),
-                    SizedBox(height: 5.h,),
+                    SizedBox(
+                      height: 5.h,
+                    ),
                     SvgPicture.asset(AppAssets.doubleArrowUpIcon),
                   ],
                 )

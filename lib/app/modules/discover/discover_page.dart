@@ -55,7 +55,7 @@ class Discover extends StatelessWidget {
                           ? Center(
                               child: Text(
                                 "No data found",
-                                style: AppTypography.kBold16
+                                style: AppTypography.kBold14
                                     .copyWith(color: AppColors.kWhiteColor),
                               ),
                             )

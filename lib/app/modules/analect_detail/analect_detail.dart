@@ -1,7 +1,7 @@
+import 'package:analects/app/data/contents/app_analect_categories.dart';
 import 'package:analects/app/modules/widgets/dialogs/custom_toast.dart';
 import 'package:analects/app/modules/widgets/widget_imports.dart';
 import 'package:analects/repo/analect_repo.dart';
-
 
 // ignore: must_be_immutable
 class AnalectDetail extends StatelessWidget {
@@ -9,17 +9,7 @@ class AnalectDetail extends StatelessWidget {
 
   final TextEditingController _analectNameController = TextEditingController();
   final _analectNameFocusNode = FocusNode();
-  final selectedCategory = Rxn<String>();
-  final categoryList = [
-    "Music",
-    "Podcasting",
-    "Voiceover",
-    "Sound Design",
-    "Religious and Spiritual",
-    "Environmental and Nature Sounds",
-    "Health and Wellness",
-  ].obs;
-
+  final selectedCategory = Rxn<AnalectCategories>();
   final pickedFile = Rxn<File?>();
 
   final confirmationCheck = false.obs;
@@ -70,12 +60,11 @@ class AnalectDetail extends StatelessWidget {
                   await AnalectsRepo().postAnalects(
                     audioFilePath: controller.recordingPath!,
                     analectImage: pickedFile.value!,
-                    category: selectedCategory.value!,
+                    category: selectedCategory.value!.name,
                     analectName: _analectNameController.text,
                   );
-                  Get.back();
-                  Get.back();
-                  Get.back();
+                  Get.offAll(() => LandingPage(),
+                      transition: Transition.fadeIn);
                 }
               },
               text: confirmationCheck.value ? "Post " : "Confirm",
@@ -179,10 +168,10 @@ class AnalectDetail extends StatelessWidget {
                                 ),
                                 InkWell(
                                   onTap: () {
-                                    controller.isPlaying.value =
-                                        !controller.isPlaying.value;
-                                    if (controller.isPlaying.value) {
-                                      controller.play();
+                                    // controller.isPlaying.value =
+                                    //     !controller.isPlaying.value;
+                                    if (!controller.isPlaying.value) {
+                                      controller.playPlayer();
                                     } else {
                                       controller.stopPlayer();
                                     }
@@ -244,23 +233,23 @@ class AnalectDetail extends StatelessWidget {
                   ),
                   Obx(
                     () {
-                      return CustomDropdown<String>(
+                      return CustomDropdown<AnalectCategories>(
                         width: 330.w,
                         label: "Category",
                         // hasSearch: true,
                         selectedValue: selectedCategory.value,
-                        items: categoryList.map(
-                          (String value) {
-                            return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(
-                                  value,
-                                  style: AppTypography.kMedium14.copyWith(
-                                    color: AppColors.kWhiteColor,
+                        items: AnalectCategories.values
+                            .map((e) => DropdownMenuItem(
+                                  value: e,
+                                  child: Text(
+                                    e.name.toString(),
+                                    style: AppTypography.kMedium14.copyWith(
+                                      color: AppColors.kWhiteColor,
+                                    ),
                                   ),
-                                ));
-                          },
-                        ).toList(),
+                                ))
+                            .toList(),
+
                         onChanged: (value) {
                           selectedCategory.value = value!;
                           return null;

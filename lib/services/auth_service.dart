@@ -28,17 +28,18 @@ class AuthService {
           .createUserWithEmailAndPassword(email: email, password: password)
           .then((value) async {
         final userModel = UserModel(
-          id: value.user!.uid,
-          email: email,
-          name: "",
-          creator: false,
-          analects: '',
-          category: '',
-          noOfSubscribers: '',
-          creatorBio: '',
-          followers: '',
-          noOfListener: '',
-        );
+            id: value.user!.uid,
+            email: email,
+            name: "",
+            creator: false,
+            analects: 0,
+            category: '',
+            noOfSubscribers: '0',
+            creatorBio: '',
+            followers: '0',
+            noOfListener: '0',
+            following: '0',
+            profileImage: '');
         await db.userCollection.doc(userModel.id).set(userModel);
         Get.put(UserController(), permanent: true);
         Get.back();
@@ -81,18 +82,18 @@ class AuthService {
         final doc = await db.userCollection.doc(user.uid).get();
         if (!doc.exists) {
           final userModel = UserModel(
-            id: user.uid,
-            name: user.displayName ?? "",
-            email: user.email ?? "",
-            profileImage: user.photoURL ?? "",
-            creator: false,
-            analects: '',
-            category: '',
-            creatorBio: '',
-            followers: '',
-            noOfListener: '',
-            noOfSubscribers: '',
-          );
+              id: user.uid,
+              name: user.displayName ?? "",
+              email: user.email ?? "",
+              profileImage: user.photoURL ?? "",
+              creator: false,
+              analects: 0,
+              category: '',
+              creatorBio: '',
+              followers: '0',
+              noOfListener: '0',
+              noOfSubscribers: '0',
+              following: '0');
           log("userData ${userModel.toMap().toString()}");
           await db.userCollection.doc(user.uid).set(userModel).then((value) {
             log("user data successfully added");

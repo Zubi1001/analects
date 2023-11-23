@@ -1,9 +1,15 @@
+import 'package:analects/app/data/contents/app_analect_categories.dart';
+import 'package:analects/app/modules/widgets/dialogs/custom_toast.dart';
 import 'package:analects/app/modules/widgets/widget_imports.dart';
+import 'package:analects/repo/user_repo.dart';
 
 class CreatorDescriptionPage extends StatelessWidget {
-  CreatorDescriptionPage({super.key});
+  final String subscriptionName;
+  CreatorDescriptionPage({super.key, required this.subscriptionName});
 
   final user = Get.find<UserController>().currentUser;
+  final selectedCategory = Rxn<AnalectCategories>();
+  final descriptionController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +62,11 @@ class CreatorDescriptionPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20.r),
                 ),
                 child: TextField(
+                  controller: descriptionController,
                   maxLines: 5,
+                  style: AppTypography.kLight16.copyWith(
+                    color: AppColors.kWhiteColor,
+                  ),
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: "Description",
@@ -66,17 +76,76 @@ class CreatorDescriptionPage extends StatelessWidget {
                   ),
                 ),
               ),
-              const Spacer(),
+              SizedBox(
+                height: 10.h,
+              ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Category",
+                  style: AppTypography.kMedium16.copyWith(
+                    color: AppColors.kWhiteColor.withOpacity(.3),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 10.h,
+              ),
+              Obx(
+                () {
+                  return CustomDropdown<AnalectCategories>(
+                    width: 330.w,
+                    label: "Category",
+                    // hasSearch: true,
+                    selectedValue: selectedCategory.value,
+                    items: AnalectCategories.values
+                        .map((e) => DropdownMenuItem(
+                              value: e,
+                              child: Text(
+                                e.name.toString(),
+                                style: AppTypography.kMedium14.copyWith(
+                                  color: AppColors.kWhiteColor,
+                                ),
+                              ),
+                            ))
+                        .toList(),
+
+                    onChanged: (value) {
+                      selectedCategory.value = value!;
+                      return null;
+                    },
+                  );
+                },
+              ),
+              SizedBox(
+                height: 170.h,
+              ),
               CustomButton(
                 text: "Save",
-                onTap: () {
-                  Get.offAll(() =>  LandingPage(), transition: Transition.fadeIn);
+                onTap: () async {
+                  if(descriptionController.text.isEmpty){
+                    showToast("Please enter description");
+                  
+                    return;
+                  }else if (selectedCategory.value == null){
+                     showToast("Please select category");
+                   
+                    return;
+                  }else {
+                      await UserRepo().addBioAndCategory(bio: descriptionController.text, category: selectedCategory.value!.name.toString(), creatorSubs:subscriptionName == ""? "Free Plan":subscriptionName);
+                      showToast("Your become creator successfully");
+                        Get.offAll(() => LandingPage(),
+                      transition: Transition.fadeIn);
+                  }
+                
                 },
                 buttonColor: AppColors.kSecondaryColor,
                 width: 315.w,
                 height: 64.h,
               ),
-              SizedBox(height: 20.h,),
+              SizedBox(
+                height: 20.h,
+              ),
             ],
           ),
         ),

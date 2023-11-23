@@ -16,6 +16,7 @@ class LandingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.kPrimaryColor,
+  
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -26,9 +27,9 @@ class LandingPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     InkWell(
-                      onTap: (){
-                        Get.to(() => SettingPage());
-                      },
+                      // onTap: () {
+                      //   Get.to(() => SettingPage());
+                      // },
                       child: Text('Hey ${userName == "" ? "User" : userName}!',
                           style: AppTypography.kExtraBold20),
                     ),
@@ -36,6 +37,16 @@ class LandingPage extends StatelessWidget {
                       Icons.search,
                       color: Colors.white,
                       size: 30.sp,
+                    ),
+                    InkWell(
+                       onTap: () {
+                        Get.to(() => SettingPage());
+                      },
+                      child: CircleAvatar(
+                        radius: 20.w,
+                        backgroundColor: AppColors.kSecondaryColor,
+                        backgroundImage: CachedNetworkImageProvider(_user.profileImage),
+                      ),
                     )
                   ],
                 ),
@@ -47,7 +58,7 @@ class LandingPage extends StatelessWidget {
                   children: [
                     Text('Top Creators', style: AppTypography.kExtraBold20),
                     InkWell(
-                      onTap: () => Get.to(() =>  Discover()),
+                      onTap: () => Get.to(() => Discover()),
                       child: Text('See All',
                           style: AppTypography.specialTextStyle),
                     ),
@@ -62,17 +73,25 @@ class LandingPage extends StatelessWidget {
                 child: Obx(() {
                   return SizedBox(
                     height: 230.h,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      shrinkWrap: true,
-                      itemCount: controller.topCreatorList.length,
-                      itemBuilder: (context, index) {
-                        return HorizontalScrollViewItem(
-                          labelButtonCheck: true,
-                          creatorData: controller.topCreatorList[index]!,
-                        );
-                      },
-                    ),
+                    child: controller.topCreatorList.isEmpty
+                        ? Center(
+                            child: Text(
+                              "No Creator Found",
+                              style: AppTypography.kBold16
+                                  .copyWith(color: AppColors.kWhiteColor),
+                            ),
+                          )
+                        : ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            shrinkWrap: true,
+                            itemCount: controller.topCreatorList.length,
+                            itemBuilder: (context, index) {
+                              return HorizontalScrollViewItem(
+                                labelButtonCheck: true,
+                                creatorData: controller.topCreatorList[index]!,
+                              );
+                            },
+                          ),
                   );
                 }),
               ),
@@ -96,7 +115,9 @@ class LandingPage extends StatelessWidget {
                     scrollDirection: Axis.horizontal,
                     itemCount: AnalectCategories.values.length,
                     itemBuilder: (context, index) {
-                      return  CatagoriesScrollViewItem(category: AnalectCategories.values[index].name,);
+                      return CatagoriesScrollViewItem(
+                        category: AnalectCategories.values[index].name,
+                      );
                     },
                   ),
                 ),
@@ -112,7 +133,15 @@ class LandingPage extends StatelessWidget {
                 ),
               ),
               Obx(() {
-                return ListView.builder(
+                return controller.newestAnalectList.isEmpty
+                        ? Center(
+                            child: Text(
+                              "No Analects Found",
+                              style: AppTypography.kBold16
+                                  .copyWith(color: AppColors.kWhiteColor),
+                            ),
+                          )
+                        :ListView.builder(
                   padding: EdgeInsets.symmetric(horizontal: 20.w),
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),

@@ -18,9 +18,11 @@ class DiscoverController extends GetxController {
     return results.docs.map((e) => e.data()!).toList();
   }
 
-  var loaded = false;
+
   Future<List<DiscoverCategoryModel>> getDiscoverCategory() async {
+    LoadingConfig.showLoading();
     try {
+
       List<DiscoverCategoryModel> discoverCategoryList = [];
       var lists = await Future.wait(List.generate(
               AnalectCategories.values.length,
@@ -30,10 +32,14 @@ class DiscoverController extends GetxController {
         discoverCategoryList.add(DiscoverCategoryModel(
             category: AnalectCategories.values[i], users: lists[i]));
       }
-      loaded = true;
+      
+      LoadingConfig.hideLoading();
       update();
       return discoverCategoryList;
+    
+
     } on Exception catch (e) {
+      LoadingConfig.hideLoading();
       log(e.toString());
       return [];
     }

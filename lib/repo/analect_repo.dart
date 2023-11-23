@@ -1,5 +1,6 @@
 import 'package:analects/app/modules/widgets/widget_imports.dart';
 import 'package:analects/models/analect_model.dart';
+import 'package:analects/repo/user_repo.dart';
 
 class AnalectsRepo {
   final _db = DatabaseService();
@@ -54,6 +55,8 @@ class AnalectsRepo {
             noOfView: '');
 
         await _db.analectsCollection.doc(value.id).update(analectModel1.toMap());
+        await UserRepo().incrementAnalects(uid: _currentUser!.id);
+      
       });
       LoadingConfig.hideLoading();
     } catch (e) {

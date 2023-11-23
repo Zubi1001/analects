@@ -5,9 +5,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 
 class CreatorProfilePage extends StatelessWidget {
-   CreatorProfilePage({super.key});
+  final UserModel? creatorData;
+  CreatorProfilePage({super.key, required this.creatorData});
 
   final controller = Get.put(CreatorProfileController());
+  final user = Get.find<UserController>().currentUser;
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +25,8 @@ class CreatorProfilePage extends StatelessWidget {
                     PullDownMenuItem(
                       title: "Create Analects",
                       onTap: () {
-                        Get.to(() => const CreateAnalects());
-                      }, 
+                        if(user!.creator) Get.to(() => const CreateAnalects());
+                      },
                     ),
                   ],
               position: PullDownMenuPosition.automatic,
@@ -54,22 +56,22 @@ class CreatorProfilePage extends StatelessWidget {
                   child: Container(
                     width: 120.w,
                     height: 120.w,
-                    decoration: const BoxDecoration(
+                    decoration:  BoxDecoration(
                       shape: BoxShape.circle,
                       color: AppColors.kSecondaryColor,
                       image: DecorationImage(
-                          image: AssetImage(AppAssets.creatorImage),
+                          image: CachedNetworkImageProvider(creatorData!.profileImage),
                           fit: BoxFit.cover),
                     ),
                   ),
                 ),
                 SizedBox(height: 10.h),
-                Text("Joy & Jill",
+                Text(creatorData!.name,
                     style: AppTypography.kBold24
                         .copyWith(color: AppColors.kWhiteColor)),
                 SizedBox(height: 15.h),
                 Text(
-                  "Odio consequat ut interdum massa vivamus sem auctor. Malesuada ultrices curabitur sed scelerisque purus hendrerit.",
+                  creatorData!.creatorBio,
                   style: AppTypography.kLight14.copyWith(
                     color: AppColors.kWhiteColor.withOpacity(.3),
                     fontSize: 13,
@@ -81,8 +83,8 @@ class CreatorProfilePage extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      const UpDownText(
-                        title: "800K",
+                       UpDownText(
+                        title: creatorData!.followers,
                         subtitle: "Followers",
                       ),
                       Padding(
@@ -91,8 +93,8 @@ class CreatorProfilePage extends StatelessWidget {
                           color: AppColors.kSecondaryColor,
                         ),
                       ),
-                      const UpDownText(
-                        title: "80K",
+                       UpDownText(
+                        title: creatorData!.following,
                         subtitle: "Following",
                       ),
                       Padding(
@@ -101,8 +103,8 @@ class CreatorProfilePage extends StatelessWidget {
                           color: AppColors.kSecondaryColor,
                         ),
                       ),
-                      const UpDownText(
-                        title: "240",
+                       UpDownText(
+                        title: creatorData!.analects.toString(),
                         subtitle: "Analects",
                       ),
                     ],
@@ -125,7 +127,7 @@ class CreatorProfilePage extends StatelessWidget {
                     CustomButton(
                       text: "Subscribe",
                       onTap: () {
-                        Get.to(() => const SubscriptionPage());
+                        Get.to(() =>  SubscriptionPage(creatorData: creatorData!,));
                       },
                       width: 150.w,
                       height: 55.h,
@@ -152,20 +154,20 @@ class CreatorProfilePage extends StatelessWidget {
                 SizedBox(
                   height: 25.h,
                 ),
-                Obx(
-                   () {
-                    return ListView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      padding: EdgeInsets.zero,
-                      scrollDirection: Axis.vertical,
-                      itemCount: controller.analectList.length,
-                      itemBuilder: (context, index) {
-                        return  AnalectsListViewItem(analectData: controller.analectList[index],);
-                      },
-                    );
-                  }
-                ),
+                Obx(() {
+                  return ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    padding: EdgeInsets.zero,
+                    scrollDirection: Axis.vertical,
+                    itemCount: controller.analectList.length,
+                    itemBuilder: (context, index) {
+                      return AnalectsListViewItem(
+                        analectData: controller.analectList[index],
+                      );
+                    },
+                  );
+                }),
               ],
             ),
           ),

@@ -1,10 +1,11 @@
 import '../app/modules/widgets/widget_imports.dart';
 
-class UserRepo{
+class UserRepo {
   final _db = DatabaseService();
   String get _currentUid => Get.find<UserController>().currentUser!.id;
 
-  Future<void> updateNameAndBio({required String name, required String bio}) async {
+  Future<void> updateNameAndBio(
+      {required String name, required String bio}) async {
     LoadingConfig.showLoading();
     try {
       await _db.userCollection
@@ -24,9 +25,48 @@ class UserRepo{
         file: photo,
         folderName: StorageFolderNames.userFolder(_currentUid),
       );
+      await _db.userCollection.doc(_currentUid).update({'profileImage': url});
+      LoadingConfig.hideLoading();
+    } catch (e) {
+      LoadingConfig.hideLoading();
+      showErrorDialog(e.toString());
+    }
+  }
+
+  Future<void> incrementAnalects({required String uid}) async {
+    LoadingConfig.showLoading();
+    try {
+      _db.userCollection.doc(_currentUid).update({
+        "analects": FieldValue.increment(1),
+      });
+      LoadingConfig.hideLoading();
+    } catch (e) {
+      LoadingConfig.hideLoading();
+      showErrorDialog(e.toString());
+    }
+  }
+
+  Future<void> decrementAnalects({required String uid}) async {
+    LoadingConfig.showLoading();
+    try {
+      _db.userCollection.doc(_currentUid).update({
+        "analects": FieldValue.increment(-1),
+      });
+      LoadingConfig.hideLoading();
+    } catch (e) {
+      LoadingConfig.hideLoading();
+      showErrorDialog(e.toString());
+    }
+  }
+
+
+  Future<void> addBioAndCategory(
+      {required String bio, required String category, required String creatorSubs}) async {
+    LoadingConfig.showLoading();
+    try {
       await _db.userCollection
           .doc(_currentUid)
-          .update({'image': url});
+          .update({'creatorBio': bio,'category': category,"creatorSubs":creatorSubs});
       LoadingConfig.hideLoading();
     } catch (e) {
       LoadingConfig.hideLoading();

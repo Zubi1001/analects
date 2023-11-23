@@ -54,7 +54,7 @@ class AnalectsListViewItem extends StatelessWidget {
                   height: 70.h,
                   width: 70.h,
                   onPressed: () {
-                    Get.to(() =>  PlayAnalect(audioFileUrl: analectData!.audioUrl,));
+                    Get.to(() =>  PlayAnalect(analectData: analectData!,));
                   },
                   isPlaying: false,
                 ),

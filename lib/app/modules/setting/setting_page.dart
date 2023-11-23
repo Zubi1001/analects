@@ -55,9 +55,9 @@ class SettingPage extends StatelessWidget {
                 height: 30.h,
               ),
               CustomButton(
-                text: "Become a Creator",
+                text: user!.creator?"See Your Creator Profile": "Become a Creator",
                 onTap: () {
-                  Get.to(()=> CreatorSubscriptionPage());
+                   user!.creator? Get.to( ()=>CreatorProfilePage(creatorData: user!)): Get.to(()=> const CreatorSubscriptionPage());
                 },
                 buttonColor: AppColors.kBlueColor,
                 width: 315.w,

@@ -1,10 +1,12 @@
 import 'package:analects/app/modules/widgets/widget_imports.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:path_provider/path_provider.dart';
 
 class CreateAnalectsController extends GetxController {
-  
   final isRecording = false.obs;
   final isPlaying = false.obs;
+  final isPlayingPaused = false.obs;
+  final isPlayingFinished = false.obs;
   final isRecordingPaused = false.obs;
   final timeLimitExceed = false.obs;
   final startTime = 0.obs;
@@ -14,9 +16,6 @@ class CreateAnalectsController extends GetxController {
 
   final playerStartTime = 0.obs;
   final playerElapsedTime = 0.obs;
-
-   
-
 
   final FlutterSoundPlayer? _player = FlutterSoundPlayer();
   final FlutterSoundRecorder? _recorder = FlutterSoundRecorder();
@@ -49,9 +48,11 @@ class CreateAnalectsController extends GetxController {
     await session.configure(AudioSessionConfiguration(
       avAudioSessionCategory: AVAudioSessionCategory.playAndRecord,
       avAudioSessionCategoryOptions:
-          AVAudioSessionCategoryOptions.allowBluetooth | AVAudioSessionCategoryOptions.defaultToSpeaker,
+          AVAudioSessionCategoryOptions.allowBluetooth |
+              AVAudioSessionCategoryOptions.defaultToSpeaker,
       avAudioSessionMode: AVAudioSessionMode.spokenAudio,
-      avAudioSessionRouteSharingPolicy: AVAudioSessionRouteSharingPolicy.defaultPolicy,
+      avAudioSessionRouteSharingPolicy:
+          AVAudioSessionRouteSharingPolicy.defaultPolicy,
       avAudioSessionSetActiveOptions: AVAudioSessionSetActiveOptions.none,
       androidAudioAttributes: const AndroidAudioAttributes(
         contentType: AndroidAudioContentType.speech,
@@ -67,7 +68,8 @@ class CreateAnalectsController extends GetxController {
   Future<void> startRecording() async {
     if (!_isRecorderInitialized.value) return;
     Directory tempDir = await getTemporaryDirectory();
-    String filePath = '${tempDir.path}/${DateTime.now().millisecondsSinceEpoch}.mp4';
+    String filePath =
+        '${tempDir.path}/${DateTime.now().millisecondsSinceEpoch}.mp4';
     _recorder!.startRecorder(toFile: filePath, codec: _codec).then((value) {
       recordingPath = filePath;
       update();
@@ -119,14 +121,16 @@ class CreateAnalectsController extends GetxController {
   ///Start Function
   void start() async {
     if (!isRecording.value && !timeLimitExceed.value) {
-      startTime.value = DateTime.now().millisecondsSinceEpoch - elapsedTime.value;
+      startTime.value =
+          DateTime.now().millisecondsSinceEpoch - elapsedTime.value;
       isRecording.value = true;
       update();
       await startRecording();
 
       Timer.periodic(const Duration(seconds: 1), (timer) {
         if (isRecording.value) {
-          elapsedTime.value = DateTime.now().millisecondsSinceEpoch - startTime.value;
+          elapsedTime.value =
+              DateTime.now().millisecondsSinceEpoch - startTime.value;
           update();
 
           if (elapsedTime.value >= const Duration(minutes: 1).inMilliseconds) {
@@ -168,12 +172,13 @@ class CreateAnalectsController extends GetxController {
   }
 
   ///For player
-  void play({String? audioUrl}) {
+  void playPlayer({String? audioUrl}) {
     if (!_isPlayerInitialized.value) return;
     playerStartTime.value = 0;
     playerElapsedTime.value = 0;
     Timer? playerTimer;
-    playerStartTime.value = DateTime.now().millisecondsSinceEpoch - playerElapsedTime.value;  
+    playerStartTime.value =
+        DateTime.now().millisecondsSinceEpoch - playerElapsedTime.value;
     isPlaying.value = true;
     _player!
         .startPlayer(
@@ -181,20 +186,23 @@ class CreateAnalectsController extends GetxController {
             codec: _codec,
             whenFinished: () {
               isPlaying.value = false;
+              isPlayingFinished.value = true;
               playerTimer!.cancel();
               log("finished playing");
             })
         .then((value) {
-          playerTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-           playerElapsedTime.value = DateTime.now().millisecondsSinceEpoch - playerStartTime.value;
+      playerTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+        if (isPlaying.value) {
+          playerElapsedTime.value =
+              DateTime.now().millisecondsSinceEpoch - playerStartTime.value;
           update();
+        }
       });
       update();
     });
   }
-  
 
-   String get playerdisplayTime {
+  String get playerdisplayTime {
     Duration duration = Duration(milliseconds: playerElapsedTime.value);
     String minutes = (duration.inMinutes % 60).toString().padLeft(2, '0');
     String seconds = (duration.inSeconds % 60).toString().padLeft(2, '0');
@@ -203,9 +211,62 @@ class CreateAnalectsController extends GetxController {
   }
 
   void stopPlayer() {
+    if (!_isPlayerInitialized.value) return;
+    _player!.stopPlayer();
     isPlaying.value = false;
-    _player!.stopPlayer().then((value) {
-      update();
-    });
+    update();
+  }
+
+  void pausePlayer() {
+    if (!_isPlayerInitialized.value) return;
+    _player!.pausePlayer();
+    isPlaying.value = false;
+    isPlayingPaused.value = true;
+    update();
+  }
+
+  void resumePlayer() {
+    if (!_isPlayerInitialized.value) return;
+    _player!.resumePlayer();
+    isPlayingPaused.value = false;
+    isPlaying.value = true;
+    update();
+  }
+
+  void resetPlayer() {
+    if (!_isPlayerInitialized.value) return;
+    playerElapsedTime.value = 0;
+    _player!.stopPlayer();
+    isPlaying.value = false;
+    isPlayingPaused.value = false;
+    isPlayingFinished.value = false;
+    update();
+  }
+
+  increment10Sec() {
+    if (_isPlayerInitialized.value) return;
+    _player!.seekToPlayer(
+      Duration(seconds: 10),
+    );
+    update();
+  }
+
+  decrement10Sec() {
+    if (_isPlayerInitialized.value) return;
+    _player!.seekToPlayer(
+      Duration(seconds: -10),
+    );
+    update();
+  }
+
+  //
+   Future<String> getAudioDuration(String audioUrl) async {
+    final audioPlayer = AudioPlayer();
+    Duration? duration = await audioPlayer.setUrl(audioUrl);
+    //
+    String minutes = (duration!.inMinutes).toString().padLeft(2, '0');
+    String seconds = (duration.inSeconds).toString().padLeft(2, '0');
+       log("$minutes:$seconds");
+    return '$minutes:$seconds';
   }
 }

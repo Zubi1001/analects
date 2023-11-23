@@ -14,7 +14,7 @@ class HorizontalScrollViewItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => Get.to(() => CreatorProfilePage()),
+      onTap: () => Get.to(() => CreatorProfilePage(creatorData: creator,)),
       child: Container(
         width: 320.h,
         // height: 230.h,
@@ -77,9 +77,9 @@ class HorizontalScrollViewItem extends StatelessWidget {
               right: 20.w,
               child: PlayAndPauseButton(
                 onPressed: () {
-                  Get.to(() => PlayAnalect(
-                        audioFileUrl: '',
-                      ));
+                  // Get.to(() => PlayAnalect(
+                  //       audioFileUrl: '',
+                  //     ));
                 },
                 isPlaying: false,
               ),
