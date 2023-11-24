@@ -28,18 +28,20 @@ class AuthService {
           .createUserWithEmailAndPassword(email: email, password: password)
           .then((value) async {
         final userModel = UserModel(
-            id: value.user!.uid,
-            email: email,
-            name: "",
-            creator: false,
-            analects: 0,
-            category: '',
-            noOfSubscribers: '0',
-            creatorBio: '',
-            followers: '0',
-            noOfListener: '0',
-            following: '0',
-            profileImage: '');
+          id: value.user!.uid,
+          email: email,
+          name: "",
+          creator: false,
+          analects: 0,
+          category: '',
+          noOfSubscribers: 0,
+          creatorBio: '',
+          followers: 0,
+          noOfListener: 0,
+          following: 0,
+          profileImage: '',
+          creatorSubs: '',
+        );
         await db.userCollection.doc(userModel.id).set(userModel);
         Get.put(UserController(), permanent: true);
         Get.back();
@@ -63,37 +65,37 @@ class AuthService {
       );
       final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
 
-      // Obtain the auth details from the request
       final GoogleSignInAuthentication? googleAuth =
           await googleUser?.authentication;
 
-      // Create a new credential
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth?.accessToken,
         idToken: googleAuth?.idToken,
       );
 
-      // Once signed in, return the UserCredential
       final userCredentials =
           await FirebaseAuth.instance.signInWithCredential(credential);
+
       final user = userCredentials.user;
       log("userData  $user");
       if (user != null) {
         final doc = await db.userCollection.doc(user.uid).get();
         if (!doc.exists) {
           final userModel = UserModel(
-              id: user.uid,
-              name: user.displayName ?? "",
-              email: user.email ?? "",
-              profileImage: user.photoURL ?? "",
-              creator: false,
-              analects: 0,
-              category: '',
-              creatorBio: '',
-              followers: '0',
-              noOfListener: '0',
-              noOfSubscribers: '0',
-              following: '0');
+            id: user.uid,
+            name: user.displayName ?? "",
+            email: user.email ?? "",
+            profileImage: user.photoURL ?? "",
+            creator: false,
+            analects: 0,
+            category: '',
+            creatorBio: '',
+            followers: 0,
+            noOfListener: 0,
+            noOfSubscribers: 0,
+            following: 0,
+            creatorSubs: '',
+          );
           log("userData ${userModel.toMap().toString()}");
           await db.userCollection.doc(user.uid).set(userModel).then((value) {
             log("user data successfully added");

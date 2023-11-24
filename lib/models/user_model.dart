@@ -10,10 +10,11 @@ class UserModel {
   int analects;
   String category;
   String creatorBio;
-  String followers;
-  String noOfListener;
-  String noOfSubscribers;
-  String following;
+  int followers;
+  int noOfListener;
+  int noOfSubscribers;
+  int following;
+  String creatorSubs;
 
   UserModel({
     required this.id,
@@ -28,6 +29,7 @@ class UserModel {
     required this.noOfListener,
     required this.noOfSubscribers,
     required this.following,
+    required this.creatorSubs,
   });
 
   Map<String, dynamic> toMap() {
@@ -44,6 +46,7 @@ class UserModel {
       'noOfListener': noOfListener,
       'noOfSubscribers': noOfSubscribers,
       'following': following,
+      'creatorSubs': creatorSubs,
     };
   }
 
@@ -57,10 +60,11 @@ class UserModel {
       analects: map['analects'] as int,
       category: map['category'] as String,
       creatorBio: map['creatorBio'] as String,
-      followers: map['followers'] as String,
-      noOfListener: map['noOfListener'] as String,
-      noOfSubscribers: map['noOfSubscribers'] as String,
-      following: map['following'] as String,
+      followers: map['followers'] as int,
+      noOfListener: map['noOfListener'] as int,
+      noOfSubscribers: map['noOfSubscribers'] as int,
+      following: map['following'] as int,
+      creatorSubs: map['creatorSubs'] as String,
     );
   }
 
@@ -78,10 +82,11 @@ class UserModel {
     int? analects,
     String? category,
     String? creatorBio,
-    String? followers,
-    String? noOfListener,
-    String? noOfSubscribers,
-    String? following,
+    int? followers,
+    int? noOfListener,
+    int? noOfSubscribers,
+    int? following,
+    String? creatorSubs,
   }) {
     return UserModel(
       id: id ?? this.id,
@@ -96,12 +101,13 @@ class UserModel {
       noOfListener: noOfListener ?? this.noOfListener,
       noOfSubscribers: noOfSubscribers ?? this.noOfSubscribers,
       following: following ?? this.following,
+      creatorSubs: creatorSubs ?? this.creatorSubs,
     );
   }
 
   @override
   String toString() {
-    return 'UserModel(id: $id, email: $email, profileImage: $profileImage, name: $name, creator: $creator, analects: $analects, category: $category, creatorBio: $creatorBio, followers: $followers, noOfListener: $noOfListener, noOfSubscribers: $noOfSubscribers, following: $following)';
+    return 'UserModel(id: $id, email: $email, profileImage: $profileImage, name: $name, creator: $creator, analects: $analects, category: $category, creatorBio: $creatorBio, followers: $followers, noOfListener: $noOfListener, noOfSubscribers: $noOfSubscribers, following: $following, creatorSubs: $creatorSubs)';
   }
 
   @override
@@ -120,7 +126,8 @@ class UserModel {
       other.followers == followers &&
       other.noOfListener == noOfListener &&
       other.noOfSubscribers == noOfSubscribers &&
-      other.following == following;
+      other.following == following &&
+      other.creatorSubs == creatorSubs;
   }
 
   @override
@@ -136,6 +143,7 @@ class UserModel {
       followers.hashCode ^
       noOfListener.hashCode ^
       noOfSubscribers.hashCode ^
-      following.hashCode;
+      following.hashCode ^
+      creatorSubs.hashCode;
   }
 }

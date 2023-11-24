@@ -1,6 +1,7 @@
 import 'package:analects/app/modules/creator_subscription/creator_description.dart';
 import 'package:analects/app/modules/widgets/widget_imports.dart';
-import 'package:analects/controller/subscription_controller.dart';
+import 'package:analects/controller/creator_subscription_controller.dart';
+
 import 'package:analects/models/creator_subscription_model.dart';
 
 class CreatorSubscriptionPage extends StatelessWidget {

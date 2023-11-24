@@ -132,7 +132,8 @@ class CreatorDescriptionPage extends StatelessWidget {
                    
                     return;
                   }else {
-                      await UserRepo().addBioAndCategory(bio: descriptionController.text, category: selectedCategory.value!.name.toString(), creatorSubs:subscriptionName == ""? "Free Plan":subscriptionName);
+                      await UserRepo().addBioAndCategorytoBecomeCreator(bio: descriptionController.text, category: selectedCategory.value!.name.toString(), creatorSubs:subscriptionName == ""? "Free Plan":subscriptionName);
+                      Get.find<UserController>().update();
                       showToast("Your become creator successfully");
                         Get.offAll(() => LandingPage(),
                       transition: Transition.fadeIn);

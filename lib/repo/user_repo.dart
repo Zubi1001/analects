@@ -10,7 +10,7 @@ class UserRepo {
     try {
       await _db.userCollection
           .doc(_currentUid)
-          .update({'name': name, 'creatorbio': bio});
+          .update({'name': name, 'creatorBio': bio});
       LoadingConfig.hideLoading();
     } catch (e) {
       LoadingConfig.hideLoading();
@@ -60,19 +60,32 @@ class UserRepo {
   }
 
 
-  Future<void> addBioAndCategory(
+  Future<void> addBioAndCategorytoBecomeCreator(
       {required String bio, required String category, required String creatorSubs}) async {
     LoadingConfig.showLoading();
     try {
       await _db.userCollection
           .doc(_currentUid)
-          .update({'creatorBio': bio,'category': category,"creatorSubs":creatorSubs});
+          .update({'creatorBio': bio,'category': category,"creatorSubs":creatorSubs, "creator" : true});
       LoadingConfig.hideLoading();
     } catch (e) {
       LoadingConfig.hideLoading();
       showErrorDialog(e.toString());
     }
   }
+
+  // Future<void> addSubscription({required String subscription}) async {
+  //   LoadingConfig.showLoading();
+  //   try {
+  //     await _db.userCollection
+  //         .doc(_currentUid)
+  //         .update({'creatorSubs': subscription});
+  //     LoadingConfig.hideLoading();
+  //   } catch (e) {
+  //     LoadingConfig.hideLoading();
+  //     showErrorDialog(e.toString());
+  //   }
+  // }
 }
 
 class StorageFolderNames {

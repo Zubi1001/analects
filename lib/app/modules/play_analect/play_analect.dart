@@ -174,7 +174,7 @@ class _PlayAnalectState extends State<PlayAnalect> {
                                 .copyWith(color: AppColors.kWhiteColor),
                           ),
                           TextSpan(
-                            text: " / $audioDuration",
+                            text: " / ${playerController.formatDuration}",
                             style: AppTypography.kBold14.copyWith(
                                 fontSize: 13,
                                 color: AppColors.kWhiteColor.withOpacity(.3)),

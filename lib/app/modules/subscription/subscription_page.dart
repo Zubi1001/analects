@@ -1,10 +1,14 @@
 import 'package:analects/app/modules/widgets/widget_imports.dart';
+import 'package:analects/controller/creator_profile_controller.dart';
 
 
 
 class SubscriptionPage extends StatelessWidget {
   final UserModel creatorData;
-  const SubscriptionPage({super.key, required this.creatorData});
+   SubscriptionPage({super.key, required this.creatorData});
+
+
+  final _creatorProfileController = Get.find<CreatorProfileController>();
 
   @override
   Widget build(BuildContext context) {
@@ -154,10 +158,13 @@ class SubscriptionPage extends StatelessWidget {
                 height: 30.h,
               ),
               CustomButton(
-                text: "Subscribe • \$5.79/month",
+                text: "Subscribe • ${creatorData.creatorSubs =="Free Plan"?"\$0/month":"\$5.79/month"}",
                 width: context.width,
                 height: 60.h,
-                onTap: () {},
+                onTap: ()  {
+                   Get.back();
+                     _creatorProfileController.setSubscribe(creatorId: creatorData.id,);
+                },
               ),
               SizedBox(
                 height: 30.h,

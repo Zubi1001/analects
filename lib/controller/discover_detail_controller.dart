@@ -12,21 +12,4 @@ class DiscoverDetailController extends GetxController{
     return _discoverDetailList.value = results.docs.map((e) => e.data()!).toList();
   }
 
-  // Stream<List<AnalectModel?>> _discoverDetail() {
-  //   return DatabaseService().analectsCollection.snapshots().map((event) {
-  //     return event.docs.map((e) => e.data()).toList();
-  //   });
-  // }
-
-  // @override
-  // void onInit() {
-  //   _discoverDetailList.bindStream(_discoverDetail());
-  //   super.onInit();
-  // }
-
-  // @override
-  // void onClose() {
-  //   _discoverDetailList.close();
-  //   super.onClose();
-  // }
 }
