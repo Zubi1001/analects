@@ -63,8 +63,6 @@ class UserEditProfilePage extends StatelessWidget {
                                   Get.back();
                                   pickedFile.value = await ImagePickerService
                                       .getImageFromCamera();
-
-                                  // emrController.pickFromCamera();
                                 },
                                 child: Container(
                                   width: context.width,
@@ -102,8 +100,6 @@ class UserEditProfilePage extends StatelessWidget {
                                   Get.back();
                                   pickedFile.value = await ImagePickerService
                                       .getImageFromGallery();
-
-                                  // emrController.pickFromLibrary();
                                 },
                                 child: Container(
                                   padding: EdgeInsets.symmetric(
@@ -286,6 +282,7 @@ class UserEditProfilePage extends StatelessWidget {
                   CustomButton(
                     text: "Save",
                     onTap: () async {
+                      log(nameController.text);
                       await UserRepo().updateNameAndBio(
                         name: nameController.text,
                         bio: bioController.text,

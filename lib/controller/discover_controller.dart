@@ -14,6 +14,7 @@ class DiscoverController extends GetxController {
       AnalectCategories analectCaegory) async {
     var results = await _db.userCollection
         .where("category", isEqualTo: analectCaegory.name.toString())
+        .where("creator" , isEqualTo: true)
         .get();
     return results.docs.map((e) => e.data()!).toList();
   }

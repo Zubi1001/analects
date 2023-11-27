@@ -63,8 +63,9 @@ class AnalectDetail extends StatelessWidget {
                     category: selectedCategory.value!.name,
                     analectName: _analectNameController.text,
                   );
-                  Get.offAll(() => LandingPage(),
-                      transition: Transition.fadeIn);
+                   Get.close(2);
+                  // Get.offAll(() => LandingPage(),
+                  //     transition: Transition.fadeIn);
                 }
               },
               text: confirmationCheck.value ? "Post " : "Confirm",

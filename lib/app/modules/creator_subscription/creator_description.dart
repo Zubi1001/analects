@@ -123,22 +123,25 @@ class CreatorDescriptionPage extends StatelessWidget {
               CustomButton(
                 text: "Save",
                 onTap: () async {
-                  if(descriptionController.text.isEmpty){
+                  if (descriptionController.text.isEmpty) {
                     showToast("Please enter description");
-                  
+
                     return;
-                  }else if (selectedCategory.value == null){
-                     showToast("Please select category");
-                   
+                  } else if (selectedCategory.value == null) {
+                    showToast("Please select category");
+
                     return;
-                  }else {
-                      await UserRepo().addBioAndCategorytoBecomeCreator(bio: descriptionController.text, category: selectedCategory.value!.name.toString(), creatorSubs:subscriptionName == ""? "Free Plan":subscriptionName);
-                      Get.find<UserController>().update();
-                      showToast("Your become creator successfully");
-                        Get.offAll(() => LandingPage(),
-                      transition: Transition.fadeIn);
+                  } else {
+                    await UserRepo().addBioAndCategorytoBecomeCreator(
+                        bio: descriptionController.text,
+                        category: selectedCategory.value!.name.toString(),
+                        creatorSubs: subscriptionName == ""
+                            ? "Free Plan"
+                            : subscriptionName);
+                    Get.find<UserController>().update();
+                    Get.close(2);
+                    showToast("Your become creator successfully");
                   }
-                
                 },
                 buttonColor: AppColors.kSecondaryColor,
                 width: 315.w,

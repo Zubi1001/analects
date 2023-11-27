@@ -1,6 +1,4 @@
-import 'package:analects/app/modules/widgets/dialogs/custom_toast.dart';
-import 'package:just_audio/just_audio.dart';
-import 'package:sleek_circular_slider/sleek_circular_slider.dart';
+import 'package:analects/app/modules/play_analect/components/comment_bottom_sheet.dart';
 
 import '../../../models/analect_model.dart';
 import '../widgets/widget_imports.dart';
@@ -8,7 +6,7 @@ import '../widgets/widget_imports.dart';
 class PlayAnalect extends StatefulWidget {
   final AnalectModel analectData;
 
-  PlayAnalect({super.key, required this.analectData});
+  const PlayAnalect({super.key, required this.analectData});
 
   @override
   State<PlayAnalect> createState() => _PlayAnalectState();
@@ -16,14 +14,10 @@ class PlayAnalect extends StatefulWidget {
 
 class _PlayAnalectState extends State<PlayAnalect> {
   late AudioPlayer player;
-
   final isPlaying = false.obs;
   final _playerProgressPosition = Rxn<Duration>();
   Duration? get playerPosition => _playerProgressPosition.value;
-
-
   final volume = RxDouble(1.0);
-
   final audioDuration = "00:00".obs;
 
   @override
@@ -45,28 +39,20 @@ class _PlayAnalectState extends State<PlayAnalect> {
     player.play();
     player.playerStateStream.listen((playerState) {
       isPlaying.value = playerState.playing;
-      setState(() {
-
-      });
+      setState(() {});
       log("khubaib");
       log(isPlaying.value.toString());
       final processingState = playerState.processingState;
-      if (processingState == ProcessingState.loading || processingState == ProcessingState.buffering) {
-        // isPlaying.value = false;
+      if (processingState == ProcessingState.loading ||
+          processingState == ProcessingState.buffering) {
       } else if (!isPlaying.value) {
-        // isPlaying.value = false;
       } else if (processingState != ProcessingState.completed) {
-        // isPlaying.value = true;
-      }
-      else if (processingState == ProcessingState.completed){
+      } else if (processingState == ProcessingState.completed) {
         player.seek(Duration.zero);
         player.stop();
-        // isPlaying.value = false;
-      }
-      else {
+      } else {
         player.seek(Duration.zero);
         player.pause();
-        // isPlaying.value = false;
       }
     });
     player.positionStream.listen((Duration position) {
@@ -77,7 +63,6 @@ class _PlayAnalectState extends State<PlayAnalect> {
   void seek(Duration position) {
     player.seek(position);
   }
-
 
   String formatDuration(Duration duration) {
     final minutes = (duration.inMinutes).toString().padLeft(2, '0');
@@ -208,12 +193,14 @@ class _PlayAnalectState extends State<PlayAnalect> {
                         children: [
                           Text(
                             widget.analectData.analectName,
-                            style: AppTypography.kBold16.copyWith(color: AppColors.kWhiteColor),
+                            style: AppTypography.kBold16
+                                .copyWith(color: AppColors.kWhiteColor),
                           ),
                           Text(
                             widget.analectData.category,
-                            style: AppTypography.kLight14
-                                .copyWith(fontSize: 13, color: AppColors.kWhiteColor.withOpacity(.3)),
+                            style: AppTypography.kLight14.copyWith(
+                                fontSize: 13,
+                                color: AppColors.kWhiteColor.withOpacity(.3)),
                           ),
                         ],
                       ),
@@ -223,14 +210,17 @@ class _PlayAnalectState extends State<PlayAnalect> {
                       child: RichText(
                         text: TextSpan(children: [
                           TextSpan(
-                            text: formatDuration(playerPosition ?? Duration.zero),
+                            text:
+                                formatDuration(playerPosition ?? Duration.zero),
                             // playerController.playerdisplayTime,
-                            style: AppTypography.kBold16.copyWith(color: AppColors.kWhiteColor),
+                            style: AppTypography.kBold16
+                                .copyWith(color: AppColors.kWhiteColor),
                           ),
                           TextSpan(
                             text: " / ${audioDuration.value}",
-                            style: AppTypography.kBold14
-                                .copyWith(fontSize: 13, color: AppColors.kWhiteColor.withOpacity(.3)),
+                            style: AppTypography.kBold14.copyWith(
+                                fontSize: 13,
+                                color: AppColors.kWhiteColor.withOpacity(.3)),
                           ),
                         ]),
                       ),
@@ -242,9 +232,10 @@ class _PlayAnalectState extends State<PlayAnalect> {
                   children: [
                     InkWell(
                         onTap: () {
-                          if(player.position > Duration.zero){
+                          if (player.position > Duration.zero) {
                             final currentPosition = player.position;
-                            final newPosition = currentPosition - const Duration(seconds: 10);
+                            final newPosition =
+                                currentPosition - const Duration(seconds: 10);
                             seek(newPosition);
                             showToast("- 10 second");
                           }
@@ -259,12 +250,15 @@ class _PlayAnalectState extends State<PlayAnalect> {
                         isPlaying.value ? player.pause() : player.play();
                       },
                       child: CircleAvatar(
-                        backgroundColor:
-                            isPlaying.value ? AppColors.kWhiteColor.withOpacity(.3) : AppColors.kSecondaryColor,
+                        backgroundColor: isPlaying.value
+                            ? AppColors.kWhiteColor.withOpacity(.3)
+                            : AppColors.kSecondaryColor,
                         radius: 40.h,
                         child: Center(
                           child: SvgPicture.asset(
-                            isPlaying.value ? AppAssets.stopAudioIcon : AppAssets.pauseButton,
+                            isPlaying.value
+                                ? AppAssets.stopAudioIcon
+                                : AppAssets.pauseButton,
                             width: 24.w,
                             height: 32.h,
                           ),
@@ -278,32 +272,45 @@ class _PlayAnalectState extends State<PlayAnalect> {
                         onTap: () async {
                           // Duration? duration = await player.setUrl(widget.analectData.audioUrl);
                           // if(duration! >  const Duration(seconds: 10)){
-                            final currentPosition = player.position;
-                            final newPosition = currentPosition + const Duration(seconds: 10);
-                            seek(newPosition);
-                            showToast("+ 10 second");
+                          final currentPosition = player.position;
+                          final newPosition =
+                              currentPosition + const Duration(seconds: 10);
+                          seek(newPosition);
+                          showToast("+ 10 second");
                           // }
-
                         },
-                        child: SvgPicture.asset(AppAssets.tenSecondForwardIcon)),
+                        child:
+                            SvgPicture.asset(AppAssets.tenSecondForwardIcon)),
                   ],
                 ),
                 SizedBox(
                   height: 30.h,
                 ),
-                Column(
-                  children: [
-                    Text(
-                      "Comments",
-                      style: AppTypography.kLight14.copyWith(
-                        color: AppColors.kWhiteColor.withOpacity(.3),
+                GestureDetector(
+                  onTap: () {
+                    Get.bottomSheet(
+                      CommentBottomSheet(widget: widget),
+                      isScrollControlled: true,
+                      ignoreSafeArea: false,
+                      isDismissible: false,
+                      enableDrag: true,
+                      barrierColor: AppColors.noColor,
+                    );
+                  },
+                  child: Column(
+                    children: [
+                      Text(
+                        "Comments",
+                        style: AppTypography.kLight14.copyWith(
+                          color: AppColors.kWhiteColor.withOpacity(.3),
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 5.h,
-                    ),
-                    SvgPicture.asset(AppAssets.doubleArrowUpIcon),
-                  ],
+                      SizedBox(
+                        height: 5.h,
+                      ),
+                      SvgPicture.asset(AppAssets.doubleArrowUpIcon),
+                    ],
+                  ),
                 )
               ],
             ),
@@ -313,3 +320,4 @@ class _PlayAnalectState extends State<PlayAnalect> {
     );
   }
 }
+

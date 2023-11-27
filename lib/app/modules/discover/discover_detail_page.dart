@@ -1,6 +1,4 @@
 import 'package:analects/controller/discover_detail_controller.dart';
-import 'package:analects/models/analect_model.dart';
-
 import '../widgets/widget_imports.dart';
 
 class DiscoverDetailPage extends StatelessWidget {
@@ -30,8 +28,7 @@ class DiscoverDetailPage extends StatelessWidget {
       ),
       body: SafeArea(
         child: StreamBuilder(
-          stream: DatabaseService()
-              .analectsCollection
+          stream: DatabaseService().userCollection
               .where("category", isEqualTo: header)
               .snapshots(),
           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -57,7 +54,8 @@ class DiscoverDetailPage extends StatelessWidget {
                 children: snapshot.data!.docs.map((DocumentSnapshot document) {
                   var data = document.data();
                   return AnalectsListViewItem(
-                    analectData: data as AnalectModel?,
+                    creatorData: data as UserModel?,
+                    analectData: null,
                   );
                 }).toList(),
               );
@@ -71,20 +69,6 @@ class DiscoverDetailPage extends StatelessWidget {
               );
             }
           },
-          //  Obx(
-          //    () {
-          //     return ListView.builder(
-          //       padding: EdgeInsets.symmetric(horizontal: 25.w),
-          //       scrollDirection: Axis.vertical,
-          //       itemCount: controller.discoverDetailList.length,
-          //       itemBuilder: (context, index) {
-          //         return AnalectsListViewItem(
-          //           analectData: controller.discoverDetailList[index],
-          //         );
-          //       },
-          //     );
-          //   }
-          // ),
         ),
       ),
     );

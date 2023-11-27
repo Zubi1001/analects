@@ -1,6 +1,4 @@
 import 'package:analects/app/modules/widgets/widget_imports.dart';
-import 'package:just_audio/just_audio.dart';
-import 'package:path_provider/path_provider.dart';
 
 class CreateAnalectsController extends GetxController {
   final isRecording = false.obs;
@@ -14,8 +12,8 @@ class CreateAnalectsController extends GetxController {
   final Codec _codec = Codec.aacMP4;
   String? recordingPath;
 
-  final playerStartTime = 0.obs;
-  final playerElapsedTime = 0.obs;
+  // final playerStartTime = 0.obs;
+  // final playerElapsedTime = 0.obs;
 
   final FlutterSoundPlayer? _player = FlutterSoundPlayer();
   final FlutterSoundRecorder? _recorder = FlutterSoundRecorder();
@@ -174,11 +172,11 @@ class CreateAnalectsController extends GetxController {
   ///For player
   void playPlayer({String? audioUrl}) {
     if (!_isPlayerInitialized.value) return;
-    playerStartTime.value = 0;
-    playerElapsedTime.value = 0;
-    Timer? playerTimer;
-    playerStartTime.value =
-        DateTime.now().millisecondsSinceEpoch - playerElapsedTime.value;
+    // playerStartTime.value = 0;
+    // playerElapsedTime.value = 0;
+    // Timer? playerTimer;
+    // playerStartTime.value =
+    //     DateTime.now().millisecondsSinceEpoch - playerElapsedTime.value;
     isPlaying.value = true;
     _player!
         .startPlayer(
@@ -186,29 +184,29 @@ class CreateAnalectsController extends GetxController {
             codec: _codec,
             whenFinished: () {
               isPlaying.value = false;
-              isPlayingFinished.value = true;
-              playerTimer!.cancel();
+              // isPlayingFinished.value = true;
+              // playerTimer!.cancel();
               log("finished playing");
             })
         .then((value) {
-      playerTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-        if (isPlaying.value) {
-          playerElapsedTime.value =
-              DateTime.now().millisecondsSinceEpoch - playerStartTime.value;
-          update();
-        }
-      });
+      // playerTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      //   if (isPlaying.value) {
+      //     playerElapsedTime.value =
+      //         DateTime.now().millisecondsSinceEpoch - playerStartTime.value;
+      //     update();
+      //   }
+      // });
       update();
     });
   }
 
-  String get playerDisplayTime {
-    Duration duration = Duration(milliseconds: playerElapsedTime.value);
-    String minutes = (duration.inMinutes % 60).toString().padLeft(2, '0');
-    String seconds = (duration.inSeconds % 60).toString().padLeft(2, '0');
+  // String get playerDisplayTime {
+  //   Duration duration = Duration(milliseconds: playerElapsedTime.value);
+  //   String minutes = (duration.inMinutes % 60).toString().padLeft(2, '0');
+  //   String seconds = (duration.inSeconds % 60).toString().padLeft(2, '0');
 
-    return '$minutes:$seconds';
-  }
+  //   return '$minutes:$seconds';
+  // }
 
   void stopPlayer() {
     if (!_isPlayerInitialized.value) return;
@@ -235,7 +233,7 @@ class CreateAnalectsController extends GetxController {
 
   void resetPlayer() {
     if (!_isPlayerInitialized.value) return;
-    playerElapsedTime.value = 0;
+    // playerElapsedTime.value = 0;
     _player!.stopPlayer();
     isPlaying.value = false;
     isPlayingPaused.value = false;

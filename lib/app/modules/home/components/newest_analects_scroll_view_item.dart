@@ -1,12 +1,14 @@
 import 'package:analects/models/analect_model.dart';
-
 import '../../widgets/widget_imports.dart';
+
 class AnalectsListViewItem extends StatelessWidget {
   final AnalectModel? analectData;
-  const AnalectsListViewItem({super.key, required this.analectData});
+  final UserModel? creatorData;
+  const AnalectsListViewItem({super.key, this.analectData, this.creatorData});
 
- 
-  AnalectModel get analectModel => analectData!;
+  // ignore: unnecessary_null_in_if_null_operators
+  AnalectModel? get _analectModel => analectData;
+  UserModel? get _creatorData => creatorData;
 
   @override
   Widget build(BuildContext context) {
@@ -25,25 +27,31 @@ class AnalectsListViewItem extends StatelessWidget {
                 decoration: BoxDecoration(
                     color: AppColors.kPrimary1Color,
                     borderRadius: BorderRadius.circular(23.r),
-                    image:  DecorationImage(
-                      image: CachedNetworkImageProvider(analectModel.image),
+                    image: DecorationImage(
+                      image: CachedNetworkImageProvider(
+                          _analectModel?.image ?? _creatorData!.profileImage),
                       fit: BoxFit.fill,
                     )),
               ),
               SizedBox(width: 10.w),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(analectModel.analectName, style: AppTypography.kBold14),
+                  Text(_analectModel?.analectName ?? _creatorData!.name,
+                      style: AppTypography.kBold14),
                   SizedBox(height: 10.h),
-                  Text(analectModel.category,
+                  Text(
+                      _analectModel?.category ??
+                          "${_creatorData!.analects.toString()} Analects",
                       style: AppTypography.kExtraLight12.copyWith(
                           color: AppColors.kWhiteColor.withOpacity(0.5))),
-                  SizedBox(height: 10.h),
-                  Text(analectModel.creatorName,
-                      style: AppTypography.kExtraLight12
-                          .copyWith(color: AppColors.kWhiteColor)),
+                  if (_analectModel != null) ...[
+                    SizedBox(height: 10.h),
+                    Text(_analectModel?.creatorName ?? "",
+                        style: AppTypography.kExtraLight12
+                            .copyWith(color: AppColors.kWhiteColor)),
+                  ],
                 ],
               ),
               const Spacer(),
@@ -54,7 +62,11 @@ class AnalectsListViewItem extends StatelessWidget {
                   height: 70.h,
                   width: 70.h,
                   onPressed: () {
-                    Get.to(() =>  PlayAnalect(analectData: analectData!,));
+                    if (_analectModel != null) {
+                      Get.to(() => PlayAnalect(
+                            analectData: analectData!,
+                          ));
+                    }
                   },
                   isPlaying: false,
                 ),

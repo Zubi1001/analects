@@ -99,8 +99,10 @@ class CreateAnalects extends StatelessWidget {
                                 if (controller.isRecording.value ||
                                     controller.isRecordingPaused.value) {
                                   controller.stopRecording();
+                                  Get.back();
                                   Get.to(() => AnalectDetail());
                                 } else {
+                                  Get.back();
                                   Get.to(() => AnalectDetail());
                                 }
                               },

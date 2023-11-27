@@ -20,7 +20,7 @@ class SettingPage extends StatelessWidget {
         actions: [
           GestureDetector(
             onTap: () {
-              Get.to(()=> UserEditProfilePage());
+              Get.to(() => UserEditProfilePage());
             },
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 30.w),
@@ -51,13 +51,47 @@ class SettingPage extends StatelessWidget {
                   color: AppColors.kWhiteColor,
                 ),
               ),
+              if (user!.creator) ...[
+                SizedBox(
+                  height: 10.h,
+                ),
+                Container(
+                  width: 110.w,
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
+                  decoration: BoxDecoration(
+                      color: AppColors.kBlueColor.withOpacity(.5),
+                      borderRadius: BorderRadius.circular(20.r)),
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(
+                        AppAssets.subscriptionIcon,
+                        height: 15.h,
+                        width: 15.w,
+                      ),
+                      SizedBox(
+                        width: 10.w,
+                      ),
+                      Text(
+                        "Creator",
+                        style: AppTypography.kLight14
+                            .copyWith(color: AppColors.kWhiteColor),
+                      ),
+                    ],
+                  ),
+                )
+              ],
               SizedBox(
                 height: 30.h,
               ),
               CustomButton(
-                text: user!.creator?"See Your Creator Profile": "Become a Creator",
+                text: user!.creator
+                    ? "See Your Creator Profile"
+                    : "Become a Creator",
                 onTap: () {
-                   user!.creator? Get.to( ()=>CreatorProfilePage(creatorId: user!.id)): Get.to(()=> const CreatorSubscriptionPage());
+                  user!.creator
+                      ? Get.to(() => CreatorProfilePage(creatorId: user!.id))
+                      : Get.to(() => const CreatorSubscriptionPage());
                 },
                 buttonColor: AppColors.kBlueColor,
                 width: 315.w,
@@ -75,8 +109,10 @@ class SettingPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20.r),
                 ),
                 child: Row(children: [
-                  SvgPicture.asset(AppAssets.notificationIcon,height: 20.h,),
-
+                  SvgPicture.asset(
+                    AppAssets.notificationIcon,
+                    height: 20.h,
+                  ),
                   SizedBox(
                     width: 20.w,
                   ),
@@ -87,25 +123,23 @@ class SettingPage extends StatelessWidget {
                     ),
                   ),
                   const Spacer(),
-                  Obx(
-                     () {
-                      return SizedBox(
-                        width: 20.w,
-                        height: 20.h,
-                        child: Transform.scale(
-                          transformHitTests: false,
-                              scale: .7,
-                          child: CupertinoSwitch(
-                            value: notificationPermission.value,
-                            onChanged: (value) {
-                              notificationPermission.value = value;
-                            },
-                            activeColor: AppColors.kSecondaryColor,
-                          ),
+                  Obx(() {
+                    return SizedBox(
+                      width: 20.w,
+                      height: 20.h,
+                      child: Transform.scale(
+                        transformHitTests: false,
+                        scale: .7,
+                        child: CupertinoSwitch(
+                          value: notificationPermission.value,
+                          onChanged: (value) {
+                            notificationPermission.value = value;
+                          },
+                          activeColor: AppColors.kSecondaryColor,
                         ),
-                      );
-                    }
-                  ),
+                      ),
+                    );
+                  }),
                 ]),
               ),
               const Spacer(),

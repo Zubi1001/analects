@@ -118,6 +118,7 @@ class AuthService {
       await _auth.signOut();
       await GoogleSignIn().signOut();
       Get.delete<UserController>(force: true);
+      Get.offAll(AuthWrapper());
     } catch (e) {
       showErrorDialog(e.toString());
       log(e.toString());

@@ -30,7 +30,7 @@ class _CreatorProfilePageState extends State<CreatorProfilePage> {
     await controller.checkFollower(creatorId: widget.creatorId);
   }
 
-  bool isOtherProfile = true;
+  // bool isOtherProfile = true;
   @override
   Widget build(BuildContext context) {
     log("Total analects ${controller.analectList.length}");
@@ -131,7 +131,7 @@ class _CreatorProfilePageState extends State<CreatorProfilePage> {
                             ),
                           ),
                           SizedBox(height: 20.h),
-                          if (!isOtherProfile) ...[
+                          if (!creatorData.creator) ...[
                             Row(
                               children: [
                                 CustomButton(
