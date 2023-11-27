@@ -125,7 +125,9 @@ class SignUpPage extends StatelessWidget {
                     SizedBox(width: 120.w),
                     SvgPicture.asset(AppAssets.loginWithIPhone, width: 50.w),
                     SizedBox(width: 50.w),
-                    SvgPicture.asset(AppAssets.loginWithGoogle, width: 65.w),
+                    InkWell(
+                        onTap: () => authService.signInWithGoogle(),
+                        child: SvgPicture.asset(AppAssets.loginWithGoogle, width: 65.w)),
                   ],
                 ),
                 SizedBox(height: 20.h),

@@ -1,6 +1,8 @@
 import 'package:analects/app/modules/widgets/widget_imports.dart';
 import 'package:analects/repo/user_repo.dart';
 
+import '../widgets/dialogs/custom_toast.dart';
+
 class UserEditProfilePage extends StatelessWidget {
   UserEditProfilePage({super.key});
 
@@ -9,8 +11,11 @@ class UserEditProfilePage extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   final pickedFile = Rxn<File?>();
 
+
   @override
   Widget build(BuildContext context) {
+    final nameController = TextEditingController(text: user!.name);
+    final bioController = TextEditingController(text: user!.creatorBio);
     return Scaffold(
       backgroundColor: AppColors.kPrimaryColor,
       appBar: CustomAppBar(
@@ -204,7 +209,7 @@ class UserEditProfilePage extends StatelessWidget {
                     height: 10.h,
                   ),
                   CustomTextField(
-                    controller: TextEditingController(text: user!.name),
+                    controller: nameController,
                     hintText: "Name",
                     validator: (value) {
                       if (value!.isEmpty) {
@@ -253,7 +258,7 @@ class UserEditProfilePage extends StatelessWidget {
                     ),
                     CustomTextField(
                       maxlines: 5,
-                      controller: TextEditingController(text: user!.creatorBio),
+                      controller: bioController,
                       hintText: "Creator Bio",
                       validator: (value) {
                         if (value!.isEmpty) {
@@ -281,19 +286,17 @@ class UserEditProfilePage extends StatelessWidget {
                   CustomButton(
                     text: "Save",
                     onTap: () async {
-                      // if (_formKey.currentState!.validate()) {
                       await UserRepo().updateNameAndBio(
-                        name: user!.name,
-                        bio: user!.creatorBio,
+                        name: nameController.text,
+                        bio: bioController.text,
                       );
                       if (pickedFile.value != null) {
                         await UserRepo()
                             .updateProfilePhoto(photo: pickedFile.value!);
                       }
-                      // Fluttertoast.showToast(msg: 'Profile updated');
+                      showToast('Profile updated');
                       Get.find<UserController>().update();
-                      Get.back();
-                      // }
+                      Get.offAll(()=> AuthWrapper());
                     },
                     buttonColor: AppColors.kSecondaryColor,
                     width: 315.w,

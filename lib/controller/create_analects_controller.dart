@@ -202,7 +202,7 @@ class CreateAnalectsController extends GetxController {
     });
   }
 
-  String get playerdisplayTime {
+  String get playerDisplayTime {
     Duration duration = Duration(milliseconds: playerElapsedTime.value);
     String minutes = (duration.inMinutes % 60).toString().padLeft(2, '0');
     String seconds = (duration.inSeconds % 60).toString().padLeft(2, '0');
@@ -243,62 +243,4 @@ class CreateAnalectsController extends GetxController {
     update();
   }
 
-  increment10Sec() {
-    if (_isPlayerInitialized.value) return;
-    _player!.seekToPlayer(
-      Duration(seconds: 10),
-    );
-    update();
-  }
-
-  decrement10Sec() {
-    if (_isPlayerInitialized.value) return;
-    _player!.seekToPlayer(
-      Duration(seconds: -10),
-    );
-    update();
-  }
-
-
-  ///Using Just Audio Package
-  final audioPlayer = AudioPlayer();
-   
-  ///Get Audio Duration
-   Future<String> getAudioDuration(String audioUrl) async {
-     Duration? duration = await audioPlayer.setUrl(audioUrl);
-    //
-    String minutes = (duration!.inMinutes).toString().padLeft(2, '0');
-    String seconds = (duration.inSeconds).toString().padLeft(2, '0');
-       log("$minutes:$seconds");
-    return '$minutes:$seconds';
-  }
-
-  ///Play Audio with stream using just audio 
-  playAudio(String audioUrl) async {
-    await audioPlayer.setUrl(audioUrl);
-    await audioPlayer.play();
-    audioPlayer.playerStateStream.listen((event) {
-      log("player state: $event");
-    });
-   audioPlayer.durationStream.listen((duration) async {
-    // Convert duration to human-readable format
-      formatDuration(duration!);
-
-    // Synthesize audio for the duration
-    // final tts = Tts();
-    // final synthesizedAudio = await tts.speak(formattedDuration);
-
-    // Play the synthesized audio
-    // final audioPlayer1 = AudioPlayer();
-    // await audioPlayer1.setUrl(audioUrl);
-    // await audioPlayer1.play();
-  });
-  }
-
-  
-String formatDuration(Duration duration) {
-  final minutes = duration.inMinutes;
-  final seconds = duration.inSeconds % 60;
-  return '$minutes:$seconds';
-}
 }

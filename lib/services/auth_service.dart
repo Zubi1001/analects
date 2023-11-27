@@ -11,8 +11,9 @@ class AuthService {
     LoadingConfig.showLoading();
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
-      LoadingConfig.hideLoading();
       Get.put(UserController(), permanent: true);
+      Get.back();
+      LoadingConfig.hideLoading();
     } catch (e) {
       LoadingConfig.hideLoading();
       showErrorDialog(e.toString());
