@@ -23,6 +23,7 @@ class HomeController extends GetxController {
 
   Stream<List<AnalectModel?>> _newestAnalects() {
     return _db.analectsCollection
+        .orderBy("timestamp", descending: true)
         .snapshots()
         .map((event) => event.docs.map((e) => e.data()).toList());
   }

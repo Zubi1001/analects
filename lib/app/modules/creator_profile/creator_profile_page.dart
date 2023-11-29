@@ -30,7 +30,6 @@ class _CreatorProfilePageState extends State<CreatorProfilePage> {
     await controller.checkFollower(creatorId: widget.creatorId);
   }
 
-  // bool isOtherProfile = true;
   @override
   Widget build(BuildContext context) {
     log("Total analects ${controller.analectList.length}");
@@ -74,142 +73,226 @@ class _CreatorProfilePageState extends State<CreatorProfilePage> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   UserModel? creatorData = snapshot.data!.data();
-                  return Obx(() {
-                    return SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          Center(
-                            child: Container(
-                              width: 120.w,
-                              height: 120.w,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: AppColors.kSecondaryColor,
-                                image: DecorationImage(
-                                    image: CachedNetworkImageProvider(
-                                        creatorData!.profileImage),
-                                    fit: BoxFit.cover),
+                  return Obx(
+                    () {
+                      return SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            Center(
+                              child: Container(
+                                width: 120.w,
+                                height: 120.w,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: AppColors.kSecondaryColor,
+                                  image: DecorationImage(
+                                      image: CachedNetworkImageProvider(
+                                          creatorData!.profileImage),
+                                      fit: BoxFit.cover),
+                                ),
                               ),
                             ),
-                          ),
-                          SizedBox(height: 10.h),
-                          Text(creatorData.name,
-                              style: AppTypography.kBold24
-                                  .copyWith(color: AppColors.kWhiteColor)),
-                          SizedBox(height: 15.h),
-                          Text(creatorData.creatorBio,
-                              style: AppTypography.kLight14.copyWith(
-                                  color: AppColors.kWhiteColor.withOpacity(.3),
-                                  fontSize: 13),
-                              textAlign: TextAlign.center),
-                          SizedBox(height: 15.h),
-                          IntrinsicHeight(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                UpDownText(
-                                    title: creatorData.followers.toString(),
-                                    subtitle: "Followers"),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 8.h),
-                                  child: const VerticalDivider(
-                                      color: AppColors.kSecondaryColor),
-                                ),
-                                UpDownText(
-                                    title: creatorData.following.toString(),
-                                    subtitle: "Following"),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 8.h),
-                                  child: const VerticalDivider(
-                                    color: AppColors.kSecondaryColor,
+                            SizedBox(height: 10.h),
+                            Text(creatorData.name,
+                                style: AppTypography.kBold24
+                                    .copyWith(color: AppColors.kWhiteColor)),
+                            SizedBox(height: 15.h),
+                            Text(creatorData.creatorBio,
+                                style: AppTypography.kLight14.copyWith(
+                                    color:
+                                        AppColors.kWhiteColor.withOpacity(.3),
+                                    fontSize: 13),
+                                textAlign: TextAlign.center),
+                            SizedBox(height: 15.h),
+                            IntrinsicHeight(
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  UpDownText(
+                                      title: creatorData.followers.toString(),
+                                      subtitle: "Followers"),
+                                  Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(vertical: 8.h),
+                                    child: const VerticalDivider(
+                                        color: AppColors.kSecondaryColor),
                                   ),
-                                ),
-                                UpDownText(
-                                    title: creatorData.analects.toString(),
-                                    subtitle: "Analects"),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 20.h),
-                          if (!creatorData.creator) ...[
-                            Row(
-                              children: [
-                                CustomButton(
-                                  text: controller.followed
-                                      ? "Following"
-                                      : "Follow",
-                                  onTap: () async {
-                                    controller.setFollow(
-                                        creatorId: creatorData.id);
-                                    controller.update();
-                                  },
-                                  width: 150.w,
-                                  buttonColor: AppColors.kWhiteColor,
-                                  textColor: AppColors.kSecondaryColor,
-                                  height: 55.h,
-                                ),
-                                const Spacer(),
-                                CustomButton(
-                                  text: controller.subscribed
-                                      ? "Subscribed"
-                                      : "Subscribe",
-                                  onTap: () {
-                                    if (!controller.subscribed) {
-                                      Get.to(() => SubscriptionPage(
-                                            creatorData: creatorData,
-                                          ));
-                                    }
-                                  },
-                                  width: 150.w,
-                                  height: 55.h,
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 25.h),
-                            _buildPlayList(),
-                          ] else ...[
-                            Container(
-                              height: 50.h,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10.r),
-                                  color: AppColors.kPrimary1Color),
-                              child: TabBar(
-                                indicator: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10.r),
-                                  color: AppColors.kSecondaryColor,
-                                ),
-                                padding: EdgeInsets.zero,
-                                indicatorColor: Colors.transparent,
-                                dividerColor: Colors.transparent,
-                                indicatorSize: TabBarIndicatorSize.tab,
-                                labelColor: Colors.white,
-                                unselectedLabelColor:
-                                    AppColors.kWhiteColor.withOpacity(0.5),
-                                tabs: const [
-                                  Tab(
-                                    text: 'Analects',
+                                  UpDownText(
+                                      title: creatorData.following.toString(),
+                                      subtitle: "Following"),
+                                  Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(vertical: 8.h),
+                                    child: const VerticalDivider(
+                                      color: AppColors.kSecondaryColor,
+                                    ),
                                   ),
-                                  Tab(
-                                    text: 'Analytics',
-                                  ),
+                                  UpDownText(
+                                      title: creatorData.analects.toString(),
+                                      subtitle: "Analects"),
                                 ],
                               ),
                             ),
                             SizedBox(height: 20.h),
-                            SizedBox(
-                              height: MediaQuery.sizeOf(context).height,
-                              child: TabBarView(
+                            if (user!.id != creatorData.id) ...[
+                              Row(
                                 children: [
-                                  _buildPlayList(),
-                                  Container(),
+                                  CustomButton(
+                                    text: controller.followed
+                                        ? "Following"
+                                        : "Follow",
+                                    onTap: () async {
+                                      controller.setFollow(
+                                          creatorId: creatorData.id);
+                                      controller.update();
+                                    },
+                                    width: 150.w,
+                                    buttonColor: AppColors.kWhiteColor,
+                                    textColor: AppColors.kSecondaryColor,
+                                    height: 55.h,
+                                  ),
+                                  const Spacer(),
+                                  CustomButton(
+                                    text: controller.subscribed
+                                        ? "Subscribed"
+                                        : "Subscribe",
+                                    onTap: () {
+                                      if (!controller.subscribed) {
+                                        Get.to(() => SubscriptionPage(
+                                              creatorData: creatorData,
+                                            ));
+                                      }
+                                    },
+                                    width: 150.w,
+                                    height: 55.h,
+                                  ),
                                 ],
                               ),
-                            )
+                              SizedBox(height: 25.h),
+                              _buildPlayList(),
+                            ] else ...[
+                              Container(
+                                height: 50.h,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10.r),
+                                    color: AppColors.kPrimary1Color),
+                                child: TabBar(
+                                  indicator: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10.r),
+                                    color: AppColors.kSecondaryColor,
+                                  ),
+                                  padding: EdgeInsets.zero,
+                                  indicatorColor: Colors.transparent,
+                                  dividerColor: Colors.transparent,
+                                  indicatorSize: TabBarIndicatorSize.tab,
+                                  labelColor: Colors.white,
+                                  unselectedLabelColor:
+                                      AppColors.kWhiteColor.withOpacity(0.5),
+                                  tabs: const [
+                                    Tab(
+                                      text: 'Analects',
+                                    ),
+                                    Tab(
+                                      text: 'Analytics',
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 20.h),
+                              SizedBox(
+                                height: MediaQuery.sizeOf(context).height,
+                                child: TabBarView(
+                                  children: [
+                                    _buildPlayList(),
+                                    Column(
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text("Total Listens",
+                                                style: AppTypography.kBold16
+                                                    .copyWith(
+                                                        color: AppColors
+                                                            .kWhiteColor)),
+                                            Text(
+                                                creatorData.noOfListener
+                                                    .toString(),
+                                                style: AppTypography.kBold16
+                                                    .copyWith(
+                                                        color: AppColors
+                                                            .kWhiteColor)),
+                                          ],
+                                        ),
+                                        SizedBox(height: 10.h),
+                                         Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text("Total Views",
+                                                style: AppTypography.kBold16
+                                                    .copyWith(
+                                                        color: AppColors
+                                                            .kWhiteColor)),
+                                            Text(
+                                                creatorData.totalViewCount
+                                                    .toString(),
+                                                style: AppTypography.kBold16
+                                                    .copyWith(
+                                                        color: AppColors
+                                                            .kWhiteColor)),
+                                          ],
+                                        ),
+                                        SizedBox(height: 10.h),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text("Total Followers",
+                                                style: AppTypography.kBold16
+                                                    .copyWith(
+                                                        color: AppColors
+                                                            .kWhiteColor)),
+                                            Text(
+                                                creatorData.followersCount
+                                                    .toString(),
+                                                style: AppTypography.kBold16
+                                                    .copyWith(
+                                                        color: AppColors
+                                                            .kWhiteColor)),
+                                          ],
+                                        ),
+                                        SizedBox(height: 10.h),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text("Total Subscribers",
+                                                style: AppTypography.kBold16
+                                                    .copyWith(
+                                                        color: AppColors
+                                                            .kWhiteColor)),
+                                            Text(
+                                                creatorData.noOfSubscribersCount
+                                                    .toString(),
+                                                style: AppTypography.kBold16
+                                                    .copyWith(
+                                                        color: AppColors
+                                                            .kWhiteColor)),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
                           ],
-                        ],
-                      ),
-                    );
-                  });
+                        ),
+                      );
+                    },
+                  );
                 } else {
                   return const Center(child: CircularProgressIndicator());
                 }

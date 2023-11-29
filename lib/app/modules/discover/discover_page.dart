@@ -28,9 +28,9 @@ class Discover extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                            controller.discoverList[index]!.category.name
+                            replaceUnderScoreWithSpace(controller.discoverList[index]!.category.name
                                 .capitalizeFirst
-                                .toString(),
+                                .toString()),
                             style: AppTypography.kExtraBold20),
                         InkWell(
                           onTap: () => Get.to(() => DiscoverDetailPage(

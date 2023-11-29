@@ -42,6 +42,7 @@ class AuthService {
           following: 0,
           profileImage: '',
           creatorSubs: '',
+          totalView: 0,
         );
         await db.userCollection.doc(userModel.id).set(userModel);
         Get.put(UserController(), permanent: true);
@@ -96,6 +97,7 @@ class AuthService {
             noOfSubscribers: 0,
             following: 0,
             creatorSubs: '',
+            totalView: 0,
           );
           log("userData ${userModel.toMap().toString()}");
           await db.userCollection.doc(user.uid).set(userModel).then((value) {
@@ -110,6 +112,21 @@ class AuthService {
       LoadingConfig.hideLoading();
       showErrorDialog(e.toString());
       log(e.toString());
+    }
+  }
+
+  Future<bool> sendPasswordResetEmail(String email) async {
+    try {
+      LoadingConfig.showLoading();
+      await _auth.sendPasswordResetEmail(email: email);
+      showToast("Password Reset Email Sent");
+      LoadingConfig.hideLoading();
+
+      return true;
+    } on FirebaseAuthException catch (e) {
+      LoadingConfig.hideLoading();
+      showErrorDialog(e.message.toString());
+      return false;
     }
   }
 

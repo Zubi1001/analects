@@ -14,7 +14,7 @@ class DiscoverDetailPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.kPrimaryColor,
       appBar: CustomAppBar(
-        title: header.capitalize.toString(),
+        title: replaceUnderScoreWithSpace(header.capitalize.toString()),
         backgroundColor: AppColors.noColor,
         actions: [
           GestureDetector(

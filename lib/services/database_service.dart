@@ -10,6 +10,8 @@ class DatabaseService {
       _firebaseFirestore.collection('analects');
   CollectionReference get _creatorSubscriptionCollection =>
       _firebaseFirestore.collection('creator_subscription');
+    CollectionReference<Map<String, dynamic>> commentsCollection(String analectId) =>
+      _analectsCollection.doc(analectId).collection('comments');
   CollectionReference<UserModel?> get userCollection =>
       _userCollection.withConverter(fromFirestore: (snapshot, options) {
         return snapshot.exists ? UserModel.fromMap(snapshot.data()!) : null;

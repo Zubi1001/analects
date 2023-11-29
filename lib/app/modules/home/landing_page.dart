@@ -1,22 +1,24 @@
 import 'package:analects/app/data/contents/app_analect_categories.dart';
 import 'package:analects/app/modules/home/components/catagories_scroll_view_item.dart';
+import 'package:analects/app/modules/search/search.dart';
 import 'package:analects/app/modules/setting/setting_page.dart';
 import 'package:analects/controller/home_controller.dart';
 
 import '../widgets/widget_imports.dart';
 
+// ignore: must_be_immutable
 class LandingPage extends StatelessWidget {
   LandingPage({super.key});
 
   final _user = Get.find<UserController>().currentUser!;
-  String? get userName => _user.name;
+   String? get userName => _user.name;
   final controller = Get.put(HomeController());
+  bool filteredBySearch = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.kPrimaryColor,
-  
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -26,26 +28,28 @@ class LandingPage extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    InkWell(
-                      // onTap: () {
-                      //   Get.to(() => SettingPage());
-                      // },
-                      child: Text('Hey ${userName == "" ? "User" : userName}!',
-                          style: AppTypography.kExtraBold20),
+                   
+                    Text('Hey ${userName == "" ? "User" : userName}!',
+                        style: AppTypography.kExtraBold20),
+                    GestureDetector(
+                      onTap: () {
+                        Get.to(()=>SearchPage());
+                      },
+                      child: Icon(
+                        Icons.search,
+                        color: Colors.white,
+                        size: 30.sp,
+                      ),
                     ),
-                    Icon(
-                      Icons.search,
-                      color: Colors.white,
-                      size: 30.sp,
-                    ),
                     InkWell(
-                       onTap: () {
+                      onTap: () {
                         Get.to(() => SettingPage());
                       },
                       child: CircleAvatar(
                         radius: 20.w,
                         backgroundColor: AppColors.kSecondaryColor,
-                        backgroundImage: CachedNetworkImageProvider(_user.profileImage),
+                        backgroundImage:
+                            CachedNetworkImageProvider(_user.profileImage),
                       ),
                     )
                   ],
@@ -116,7 +120,8 @@ class LandingPage extends StatelessWidget {
                     itemCount: AnalectCategories.values.length,
                     itemBuilder: (context, index) {
                       return CatagoriesScrollViewItem(
-                        category: AnalectCategories.values[index].name,
+                        category: replaceUnderScoreWithSpace(
+                            AnalectCategories.values[index].name),
                       );
                     },
                   ),
@@ -134,25 +139,25 @@ class LandingPage extends StatelessWidget {
               ),
               Obx(() {
                 return controller.newestAnalectList.isEmpty
-                        ? Center(
-                            child: Text(
-                              "No Analects Found",
-                              style: AppTypography.kBold16
-                                  .copyWith(color: AppColors.kWhiteColor),
-                            ),
-                          )
-                        :ListView.builder(
-                  padding: EdgeInsets.symmetric(horizontal: 20.w),
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  scrollDirection: Axis.vertical,
-                  itemCount: controller.newestAnalectList.length,
-                  itemBuilder: (context, index) {
-                    return AnalectsListViewItem(
-                      analectData: controller.newestAnalectList[index],
-                    );
-                  },
-                );
+                    ? Center(
+                        child: Text(
+                          "No Analects Found",
+                          style: AppTypography.kBold16
+                              .copyWith(color: AppColors.kWhiteColor),
+                        ),
+                      )
+                    : ListView.builder(
+                        padding: EdgeInsets.symmetric(horizontal: 20.w),
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        scrollDirection: Axis.vertical,
+                        itemCount: controller.newestAnalectList.length,
+                        itemBuilder: (context, index) {
+                          return AnalectsListViewItem(
+                            analectData: controller.newestAnalectList[index],
+                          );
+                        },
+                      );
               }),
             ],
           ),
@@ -160,4 +165,9 @@ class LandingPage extends StatelessWidget {
       ),
     );
   }
+}
+
+String replaceUnderScoreWithSpace(String str) {
+  str = str.replaceAll("_", " ");
+  return str;
 }

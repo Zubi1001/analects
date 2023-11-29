@@ -1,12 +1,16 @@
 import 'package:analects/app/modules/play_analect/components/comment_bottom_sheet.dart';
+import 'package:analects/repo/analect_repo.dart';
+import 'package:analects/repo/user_repo.dart';
 
 import '../../../models/analect_model.dart';
 import '../widgets/widget_imports.dart';
 
 class PlayAnalect extends StatefulWidget {
   final AnalectModel analectData;
+  final bool autoPlay;
 
-  const PlayAnalect({super.key, required this.analectData});
+  const PlayAnalect(
+      {super.key, required this.analectData, this.autoPlay = false});
 
   @override
   State<PlayAnalect> createState() => _PlayAnalectState();
@@ -19,6 +23,7 @@ class _PlayAnalectState extends State<PlayAnalect> {
   Duration? get playerPosition => _playerProgressPosition.value;
   final volume = RxDouble(1.0);
   final audioDuration = "00:00".obs;
+  final listenCheck = false.obs;
 
   @override
   void initState() {
@@ -36,7 +41,9 @@ class _PlayAnalectState extends State<PlayAnalect> {
     // audioDuration.value = await getAudioDuration(widget.analectData.audioUrl);
 
     player.setUrl(widget.analectData.audioUrl);
-    player.play();
+    if (widget.autoPlay) {
+      player.play();
+    }
     player.playerStateStream.listen((playerState) {
       isPlaying.value = playerState.playing;
       setState(() {});
@@ -245,8 +252,23 @@ class _PlayAnalectState extends State<PlayAnalect> {
                       width: 20.w,
                     ),
                     GestureDetector(
-                      onTap: () {
+                      onTap: () async {
                         log(isPlaying.value.toString());
+                        if (isPlaying.value) {
+                          player.pause();
+                        } else {
+                          if (!widget.autoPlay && !listenCheck.value) {
+                            player.play();
+                            await UserRepo().incrementListenCount(
+                              uid: widget.analectData.creatorId,
+                            );
+                            await AnalectsRepo().incrementListenCount(
+                                analectId: widget.analectData.analectId);
+                            listenCheck.value = true;
+                          } else {
+                            player.play();
+                          }
+                        }
                         isPlaying.value ? player.pause() : player.play();
                       },
                       child: CircleAvatar(
@@ -320,4 +342,3 @@ class _PlayAnalectState extends State<PlayAnalect> {
     );
   }
 }
-

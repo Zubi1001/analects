@@ -61,12 +61,13 @@ class HorizontalScrollViewItem extends StatelessWidget {
                 right: 20.w,
                 child: Container(
                     alignment: Alignment.center,
-                    height: 40.h,
-                    width: 80.w,
+                    // height: 40.h,
+                    // width: 80.w,
+                    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
                     decoration: BoxDecoration(
                         color: AppColors.kPrimary1Color.withOpacity(0.5),
                         borderRadius: BorderRadius.circular(30.r)),
-                    child: Text(creator.category,
+                    child: Text(creator.category.capitalizeFirst!,
                         style: TextStyle(
                             color: AppColors.kWhiteColor,
                             fontSize: 16.sp,

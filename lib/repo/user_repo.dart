@@ -33,11 +33,13 @@ class UserRepo {
     }
   }
 
-  Future<void> incrementAnalects({required String uid}) async {
+  Future<void> incrementAnalectsAndChangeUserCategoryWithAnalectCreation(
+      {required String uid, required String category}) async {
     LoadingConfig.showLoading();
     try {
       _db.userCollection.doc(_currentUid).update({
         "analects": FieldValue.increment(1),
+        'category': category,
       });
       LoadingConfig.hideLoading();
     } catch (e) {
@@ -59,14 +61,18 @@ class UserRepo {
     }
   }
 
-
   Future<void> addBioAndCategorytoBecomeCreator(
-      {required String bio, required String category, required String creatorSubs}) async {
+      {required String bio,
+      required String category,
+      required String creatorSubs}) async {
     LoadingConfig.showLoading();
     try {
-      await _db.userCollection
-          .doc(_currentUid)
-          .update({'creatorBio': bio,'category': category,"creatorSubs":creatorSubs, "creator" : true});
+      await _db.userCollection.doc(_currentUid).update({
+        'creatorBio': bio,
+        'category': category,
+        "creatorSubs": creatorSubs,
+        "creator": true
+      });
       LoadingConfig.hideLoading();
     } catch (e) {
       LoadingConfig.hideLoading();
@@ -74,18 +80,45 @@ class UserRepo {
     }
   }
 
-  // Future<void> addSubscription({required String subscription}) async {
-  //   LoadingConfig.showLoading();
-  //   try {
-  //     await _db.userCollection
-  //         .doc(_currentUid)
-  //         .update({'creatorSubs': subscription});
-  //     LoadingConfig.hideLoading();
-  //   } catch (e) {
-  //     LoadingConfig.hideLoading();
-  //     showErrorDialog(e.toString());
-  //   }
-  // }
+  Future<void> incrementTotalView({required String uid}) async {
+    LoadingConfig.showLoading();
+    try {
+      _db.userCollection.doc(_currentUid).update({
+        "totalView": FieldValue.increment(1),
+      });
+      LoadingConfig.hideLoading();
+    } catch (e) {
+      LoadingConfig.hideLoading();
+      showErrorDialog(e.toString());
+    }
+  }
+
+  Future<void> incrementTotalViewAndListenCount({required String uid}) async {
+    LoadingConfig.showLoading();
+    try {
+      _db.userCollection.doc(_currentUid).update({
+        "totalView": FieldValue.increment(1),
+        "noOfListener": FieldValue.increment(1),
+      });
+      LoadingConfig.hideLoading();
+    } catch (e) {
+      LoadingConfig.hideLoading();
+      showErrorDialog(e.toString());
+    }
+  }
+
+  Future<void> incrementListenCount({required String uid}) async {
+    LoadingConfig.showLoading();
+    try {
+      _db.userCollection.doc(_currentUid).update({
+        "noOfListener": FieldValue.increment(1),
+      });
+      LoadingConfig.hideLoading();
+    } catch (e) {
+      LoadingConfig.hideLoading();
+      showErrorDialog(e.toString());
+    }
+  }
 }
 
 class StorageFolderNames {

@@ -15,48 +15,90 @@ class AnalectsRepo {
     try {
       final file = File(audioFilePath);
       final audioUrl = await FirebaseStorageService.uploadToStorage(
-          file: file, folderName: 'analects/${_currentUser!.id}');
+          file: file,
+          folderName:
+              'analects/${_currentUser!.id}/${analectName + DateTime.now().millisecondsSinceEpoch.toString()}',
+          fileName: 'audio_${analectName + DateTime.now().millisecondsSinceEpoch.toString()}');
       final imageUrl = await FirebaseStorageService.uploadToStorage(
           file: analectImage,
           folderName: 'analects/${_currentUser!.id}',
-          imageName: "analects_cover");
+          fileName:
+              "analects_cover_${analectName + DateTime.now().millisecondsSinceEpoch.toString()}");
       final analectModel = AnalectModel(
-          analectId: "",
+        analectId: "",
+        creatorId: _currentUser!.id,
+        creatorName: _currentUser!.name,
+        analectName: analectName,
+        category: category,
+        image: imageUrl,
+        audioUrl: audioUrl,
+        noOfListen: 0,
+        noOfView: 0,
+        timestamp: DateTime.now().millisecondsSinceEpoch,
+      );
+      await _db.analectsCollection.add(analectModel).then((value) async {
+        String tempId = value.id;
+        log("tempId is $tempId");
+        final analectModel1 = AnalectModel(
+          analectId: value.id,
           creatorId: _currentUser!.id,
           creatorName: _currentUser!.name,
           analectName: analectName,
           category: category,
           image: imageUrl,
           audioUrl: audioUrl,
-          noOfListen: '',
-          noOfView: '');
-      await _db.analectsCollection
-          .add(analectModel
-              //   {
-              //   "url": audioUrl,
-              //   "image": imageUrl,
-              //   "category": category,
-              //   "analectName": analectName,
-              //   "creatorId": _currentUid,
-              // }
-              )
-          .then((value) async {
-        String tempId = value.id;
-        log("tempId is $tempId");
-        final analectModel1 = AnalectModel(
-            analectId: value.id,
-            creatorId: _currentUser!.id,
-            creatorName: _currentUser!.name,
-            analectName: analectName,
-            category: category,
-            image: imageUrl,
-            audioUrl: audioUrl,
-            noOfListen: '',
-            noOfView: '');
+          noOfListen: 0,
+          noOfView: 0,
+          timestamp: DateTime.now().millisecondsSinceEpoch,
+        );
 
-        await _db.analectsCollection.doc(value.id).update(analectModel1.toMap());
-        await UserRepo().incrementAnalects(uid: _currentUser!.id);
-      
+        await _db.analectsCollection
+            .doc(value.id)
+            .update(analectModel1.toMap());
+        await UserRepo()
+            .incrementAnalectsAndChangeUserCategoryWithAnalectCreation(
+                uid: _currentUser!.id, category: category);
+      });
+      LoadingConfig.hideLoading();
+    } catch (e) {
+      LoadingConfig.hideLoading();
+      showErrorDialog(e.toString());
+    }
+  }
+
+  Future<void> incrementAnalectViewAndListenCount(
+      {required String analectId}) async {
+    LoadingConfig.showLoading();
+    try {
+      _db.analectsCollection.doc(analectId).update({
+        "noOfView": FieldValue.increment(1),
+        "noOfListen": FieldValue.increment(1),
+      });
+      LoadingConfig.hideLoading();
+    } catch (e) {
+      LoadingConfig.hideLoading();
+      showErrorDialog(e.toString());
+    }
+  }
+
+  Future<void> incrementAnalectView({required String analectId}) async {
+    LoadingConfig.showLoading();
+    try {
+      _db.analectsCollection.doc(analectId).update({
+        "noOfView": FieldValue.increment(1),
+      });
+      LoadingConfig.hideLoading();
+    } catch (e) {
+      LoadingConfig.hideLoading();
+      showErrorDialog(e.toString());
+    }
+  }
+
+  Future<void> incrementListenCount({required String analectId}) async {
+    LoadingConfig.showLoading();
+    try {
+      _db.analectsCollection.doc(analectId).update({
+        "noOfListen": FieldValue.increment(1),
       });
       LoadingConfig.hideLoading();
     } catch (e) {
