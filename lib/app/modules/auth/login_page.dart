@@ -137,7 +137,6 @@ class LoginPage extends StatelessWidget {
                                 ),
                               ),
                             );
-                            //  AuthService().sendPasswordResetEmail("");
                           },
                           child: Text(
                             "Forgot Password?",
@@ -168,9 +167,9 @@ class LoginPage extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          SvgPicture.asset(AppAssets.loginWithIPhone,
-                              width: 50.w),
-                          SizedBox(width: 50.w),
+                          // SvgPicture.asset(AppAssets.loginWithIPhone,
+                          //     width: 50.w),
+                          // SizedBox(width: 50.w),
                           InkWell(
                               onTap: () => authService.signInWithGoogle(),
                               child: SvgPicture.asset(AppAssets.loginWithGoogle,
@@ -189,7 +188,6 @@ class LoginPage extends StatelessWidget {
                             text: 'Sign Up',
                             textStyle: AppTypography.specialTextStyle,
                             onPressed: () {
-                              //here we will navigate to the sign up page.
                               Get.to(() => SignUpPage());
                             },
                           ),
