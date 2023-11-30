@@ -1,14 +1,23 @@
 import 'package:analects/app/modules/creator_subscription/creator_subscription.dart';
 import 'package:analects/app/modules/user_edit_profile/user_edit_profile.dart';
 import 'package:analects/app/modules/widgets/widget_imports.dart';
+import 'package:analects/services/notifications_services.dart';
+
 import 'package:flutter/cupertino.dart';
 
-class SettingPage extends StatelessWidget {
+class SettingPage extends StatefulWidget {
   SettingPage({super.key});
 
+  @override
+  State<SettingPage> createState() => _SettingPageState();
+}
+
+class _SettingPageState extends State<SettingPage> {
   UserModel get user => Get.find<UserController>().currentUser!;
+
   final auth = AuthService();
-  final notificationPermission = RxBool(false);
+
+  final notificationService = NotificationService();
 
   @override
   Widget build(BuildContext context) {
@@ -128,24 +137,25 @@ class SettingPage extends StatelessWidget {
                         ),
                       ),
                       const Spacer(),
-                      Obx(
-                        () {
-                          return SizedBox(
-                            width: 20.w,
-                            height: 20.h,
-                            child: Transform.scale(
-                              transformHitTests: false,
-                              scale: .7,
-                              child: CupertinoSwitch(
-                                value: notificationPermission.value,
-                                onChanged: (value) {
-                                  notificationPermission.value = value;
-                                },
-                                activeColor: AppColors.kSecondaryColor,
-                              ),
-                            ),
-                          );
-                        },
+                      SizedBox(
+                        width: 20.w,
+                        height: 20.h,
+                        child: Transform.scale(
+                          transformHitTests: false,
+                          scale: .7,
+                          child: CupertinoSwitch(
+                            value: user.allowNotification,
+                            onChanged: (value) async {
+                              LoadingConfig.showLoading();
+                              await _handleNotificationStatus();
+                              setState(() {
+                                user.allowNotification = value;
+                              });
+                               LoadingConfig.hideLoading();
+                            },
+                            activeColor: AppColors.kSecondaryColor,
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -169,5 +179,13 @@ class SettingPage extends StatelessWidget {
         ),
       );
     });
+  }
+
+  Future<void> _handleNotificationStatus() async {
+    if (user.allowNotification) {
+      await notificationService.turnOffNotifications(isTurnOffSettings: true);
+    } else {
+      await notificationService.turnOnNotifications(isTurnOnSettings: true);
+    }
   }
 }

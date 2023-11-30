@@ -1,8 +1,10 @@
 import 'package:analects/app/data/contents/app_analect_categories.dart';
+import 'package:analects/app/modules/create_analects/create_analects.dart';
 import 'package:analects/app/modules/home/components/catagories_scroll_view_item.dart';
 import 'package:analects/app/modules/search/search.dart';
 import 'package:analects/app/modules/setting/setting_page.dart';
 import 'package:analects/controller/home_controller.dart';
+import 'package:flutter/cupertino.dart';
 
 import '../widgets/widget_imports.dart';
 
@@ -11,7 +13,7 @@ class LandingPage extends StatelessWidget {
   LandingPage({super.key});
 
   final _user = Get.find<UserController>().currentUser!;
-   String? get userName => _user.name;
+   UserModel get user => _user;
   final controller = Get.put(HomeController());
   bool filteredBySearch = false;
 
@@ -19,6 +21,9 @@ class LandingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.kPrimaryColor,
+      floatingActionButton: _user.creator
+            ? const CreateAnalectFloatingButton()
+            : null,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -29,7 +34,7 @@ class LandingPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                    
-                    Text('Hey ${userName == "" ? "User" : userName}!',
+                    Text('Hey ${user.name == "" ? "User" : user.name}!',
                         style: AppTypography.kExtraBold20),
                     GestureDetector(
                       onTap: () {
@@ -164,6 +169,33 @@ class LandingPage extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class CreateAnalectFloatingButton extends StatelessWidget {
+  const CreateAnalectFloatingButton({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton.extended(
+        onPressed: () {
+          Get.to(() => const CreateAnalects());
+        },
+        backgroundColor: AppColors.kSecondaryColor,
+        label: Row(
+          children: [
+            const Icon(CupertinoIcons.waveform, color: AppColors.kWhiteColor),
+            SizedBox(width: 5.w,),
+            Text(
+              "Create Analect",
+              style: AppTypography.kBold16.copyWith(
+                  color: AppColors.kWhiteColor, fontSize: 14),
+            ),
+          ],
+        ),
+      );
   }
 }
 

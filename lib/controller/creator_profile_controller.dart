@@ -5,8 +5,8 @@ import 'package:analects/models/analect_model.dart';
 
 class CreatorProfileController extends GetxController {
   final user = Get.find<UserController>().currentUser;
-  final _creatorAnalectList = Rx<List<AnalectModel?>>([]);
 
+  final _creatorAnalectList = Rx<List<AnalectModel?>>([]);
   List<AnalectModel?> get analectList => _creatorAnalectList.value;
 
   ///
@@ -25,6 +25,7 @@ class CreatorProfileController extends GetxController {
       {required String? creatorUid}) async {
     var results = await _db.analectsCollection
         .where("creatorId", isEqualTo: creatorUid ?? user!.id)
+        .orderBy("timestamp", descending: true)
         .get();
     return _creatorAnalectList.value =
         results.docs.map((e) => e.data()!).toList();
@@ -92,7 +93,6 @@ class CreatorProfileController extends GetxController {
 
     var docSnapshot =
         await subscribeRef.collection("subscriber").doc(user!.id).get();
-    log(docSnapshot['subscribe'].toString());
     if (docSnapshot.exists) {
       _subscribed.value = true;
       return true;
@@ -144,11 +144,5 @@ class CreatorProfileController extends GetxController {
       //     .doc(user!.id)
       //     .update({"noOfSubscriptions": FieldValue.increment(1)});
     }
-  }
-
-  @override
-  void onClose() {
-    _creatorAnalectList.close();
-    super.onClose();
   }
 }

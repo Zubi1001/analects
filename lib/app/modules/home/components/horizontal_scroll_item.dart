@@ -1,27 +1,25 @@
-
 import '../../widgets/widget_imports.dart';
 
-// ignore: must_be_immutable
 class HorizontalScrollViewItem extends StatelessWidget {
   final bool labelButtonCheck;
   final UserModel? creatorData;
 
- const HorizontalScrollViewItem(
+  const HorizontalScrollViewItem(
       {super.key, this.labelButtonCheck = true, required this.creatorData});
 
   UserModel get creator => creatorData!;
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () => Get.to(() => CreatorProfilePage(creatorId: creator.id,)),
+    return GestureDetector(
+      onTap: () => Get.to(() => CreatorProfilePage(creatorId: creator.id)),
       child: Container(
         width: 320.h,
-        // height: 230.h,
         margin: EdgeInsets.all(6.h),
         decoration: BoxDecoration(
-          image:  DecorationImage(
-              image: CachedNetworkImageProvider(creator.profileImage), fit: BoxFit.fill),
+          image: DecorationImage(
+              image: CachedNetworkImageProvider(creator.profileImage),
+              fit: BoxFit.fill),
           borderRadius: BorderRadius.circular(20.r),
         ),
         child: Stack(
@@ -61,9 +59,8 @@ class HorizontalScrollViewItem extends StatelessWidget {
                 right: 20.w,
                 child: Container(
                     alignment: Alignment.center,
-                    // height: 40.h,
-                    // width: 80.w,
-                    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
                     decoration: BoxDecoration(
                         color: AppColors.kPrimary1Color.withOpacity(0.5),
                         borderRadius: BorderRadius.circular(30.r)),
@@ -77,11 +74,7 @@ class HorizontalScrollViewItem extends StatelessWidget {
               bottom: 20.h,
               right: 20.w,
               child: PlayAndPauseButton(
-                onPressed: () {
-                  // Get.to(() => PlayAnalect(
-                  //       audioFileUrl: '',
-                  //     ));
-                },
+                onPressed: () {},
                 isPlaying: false,
               ),
             ),

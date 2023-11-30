@@ -6,11 +6,15 @@ import '../../widgets/widget_imports.dart';
 class AnalectsListViewItem extends StatelessWidget {
   final AnalectModel? analectData;
   final UserModel? creatorData;
-  const AnalectsListViewItem({super.key, this.analectData, this.creatorData});
+  AnalectsListViewItem({super.key, this.analectData, this.creatorData});
 
   // ignore: unnecessary_null_in_if_null_operators
   AnalectModel? get _analectModel => analectData;
   UserModel? get _creatorData => creatorData;
+
+  final user = Get.find<UserController>().currentUser!;
+  final analectRepo = AnalectsRepo();
+  final userRepo = UserRepo();
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +24,11 @@ class AnalectsListViewItem extends StatelessWidget {
           Get.to(() => PlayAnalect(
                 analectData: analectData!,
               ));
-          await AnalectsRepo().incrementAnalectView(analectId: _analectModel!.analectId);
-          await UserRepo().incrementTotalView(uid: _analectModel!.creatorId);
+          if (analectData!.creatorId != user.id) {
+            await analectRepo.incrementAnalectView(
+                analectId: _analectModel!.analectId);
+            await userRepo.incrementTotalView(uid: _analectModel!.creatorId);
+          }
         }
       },
       child: Container(
@@ -82,10 +89,12 @@ class AnalectsListViewItem extends StatelessWidget {
                               analectData: analectData!,
                               autoPlay: true,
                             ));
-                        await AnalectsRepo().incrementAnalectViewAndListenCount(
-                            analectId: analectData!.analectId);
-                        await UserRepo().incrementTotalViewAndListenCount(
-                            uid: _analectModel!.creatorId);
+                        if (analectData!.creatorId != user.id) {
+                          await analectRepo.incrementAnalectViewAndListenCount(
+                              analectId: analectData!.analectId);
+                          await userRepo.incrementTotalViewAndListenCount(
+                              uid: _analectModel!.creatorId);
+                        }
                       }
                     },
                     isPlaying: false,

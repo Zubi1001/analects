@@ -7,6 +7,9 @@ class UserController extends GetxController {
   final Rxn<UserModel?> _firebaseUser = Rxn<UserModel?>();
   UserModel? get currentUser => _firebaseUser.value;
 
+ DocumentReference get currentUserReference =>
+      db.userCollection.doc(_ac.user!.uid);
+      
   Stream<UserModel?> get _currentUserStream {
     log("uid is ${_ac.user!.uid}");
     return db.userCollection.doc(_ac.user!.uid).snapshots().map((event) {

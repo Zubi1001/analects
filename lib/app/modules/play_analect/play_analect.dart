@@ -24,6 +24,7 @@ class _PlayAnalectState extends State<PlayAnalect> {
   final volume = RxDouble(1.0);
   final audioDuration = "00:00".obs;
   final listenCheck = false.obs;
+  final user = Get.find<UserController>().currentUser!;
 
   @override
   void initState() {
@@ -38,8 +39,6 @@ class _PlayAnalectState extends State<PlayAnalect> {
     Duration? duration = await player.setUrl(widget.analectData.audioUrl);
     audioDuration.value = formatDuration(duration!);
 
-    // audioDuration.value = await getAudioDuration(widget.analectData.audioUrl);
-
     player.setUrl(widget.analectData.audioUrl);
     if (widget.autoPlay) {
       player.play();
@@ -47,8 +46,6 @@ class _PlayAnalectState extends State<PlayAnalect> {
     player.playerStateStream.listen((playerState) {
       isPlaying.value = playerState.playing;
       setState(() {});
-      log("khubaib");
-      log(isPlaying.value.toString());
       final processingState = playerState.processingState;
       if (processingState == ProcessingState.loading ||
           processingState == ProcessingState.buffering) {
@@ -259,11 +256,14 @@ class _PlayAnalectState extends State<PlayAnalect> {
                         } else {
                           if (!widget.autoPlay && !listenCheck.value) {
                             player.play();
-                            await UserRepo().incrementListenCount(
-                              uid: widget.analectData.creatorId,
-                            );
-                            await AnalectsRepo().incrementListenCount(
-                                analectId: widget.analectData.analectId);
+                            if (widget.analectData.creatorId != user.id) {
+                              await UserRepo().incrementListenCount(
+                                uid: widget.analectData.creatorId,
+                              );
+                              await AnalectsRepo().incrementListenCount(
+                                  analectId: widget.analectData.analectId);
+                            }
+
                             listenCheck.value = true;
                           } else {
                             player.play();

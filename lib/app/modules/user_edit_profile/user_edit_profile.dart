@@ -1,18 +1,31 @@
 import 'package:analects/app/modules/widgets/widget_imports.dart';
 import 'package:analects/repo/user_repo.dart';
 
-class UserEditProfilePage extends StatelessWidget {
+class UserEditProfilePage extends StatefulWidget {
   UserEditProfilePage({super.key});
 
+  @override
+  State<UserEditProfilePage> createState() => _UserEditProfilePageState();
+}
+
+class _UserEditProfilePageState extends State<UserEditProfilePage> {
   final user = Get.find<UserController>().currentUser;
 
   final _formKey = GlobalKey<FormState>();
+
   final pickedFile = Rxn<File?>();
+  final nameController = TextEditingController();
+  final bioController = TextEditingController();
+
+  @override
+  void initState() {
+    nameController.text = user!.name;
+    bioController.text = user!.creatorBio;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final nameController = TextEditingController(text: user!.name);
-    final bioController = TextEditingController(text: user!.creatorBio);
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(

@@ -17,13 +17,13 @@ class UserModel {
   int following;
   int totalView;
   String creatorSubs;
+  bool allowNotification;
   int get analectsCount => analects;
   int get followersCount => followers;
   int get noOfListenerCount => noOfListener;
   int get noOfSubscribersCount => noOfSubscribers;
   int get followingCount => following;
   int get totalViewCount => totalView;
-
 
   UserModel({
     this.fcmToken = "",
@@ -35,12 +35,13 @@ class UserModel {
     required this.analects,
     required this.category,
     required this.creatorBio,
-    required this.followers,
-    required this.noOfListener,
-    required this.noOfSubscribers,
-    required this.following,
-    required this.totalView,
-    required this.creatorSubs,
+    this.followers = 0,
+    this.noOfListener = 0,
+    this.noOfSubscribers = 0,
+    this.following = 0,
+    this.totalView = 0,
+    this.creatorSubs = "",
+    this.allowNotification = true,
   });
 
   Map<String, dynamic> toMap() {
@@ -60,6 +61,7 @@ class UserModel {
       'following': following,
       'totalView': totalView,
       'creatorSubs': creatorSubs,
+      'allowNotification': allowNotification,
     };
   }
 
@@ -80,6 +82,7 @@ class UserModel {
       following: map['following'] as int,
       totalView: map['totalView'] as int,
       creatorSubs: map['creatorSubs'] as String,
+      allowNotification: map['allowNotification'] as bool,
     );
   }
 
@@ -104,6 +107,7 @@ class UserModel {
     int? following,
     int? totalView,
     String? creatorSubs,
+    bool? allowNotification,
   }) {
     return UserModel(
       fcmToken: fcmToken ?? this.fcmToken,
@@ -121,52 +125,54 @@ class UserModel {
       following: following ?? this.following,
       totalView: totalView ?? this.totalView,
       creatorSubs: creatorSubs ?? this.creatorSubs,
+      allowNotification: allowNotification ?? this.allowNotification,
     );
   }
 
   @override
   String toString() {
-    return 'UserModel(fcmToken: $fcmToken, id: $id, email: $email, profileImage: $profileImage, name: $name, creator: $creator, analects: $analects, category: $category, creatorBio: $creatorBio, followers: $followers, noOfListener: $noOfListener, noOfSubscribers: $noOfSubscribers, following: $following, totalView: $totalView, creatorSubs: $creatorSubs)';
+    return 'UserModel(fcmToken: $fcmToken, id: $id, email: $email, profileImage: $profileImage, name: $name, creator: $creator, analects: $analects, category: $category, creatorBio: $creatorBio, followers: $followers, noOfListener: $noOfListener, noOfSubscribers: $noOfSubscribers, following: $following, totalView: $totalView, creatorSubs: $creatorSubs, allowNotification: $allowNotification)';
   }
 
   @override
   bool operator ==(covariant UserModel other) {
     if (identical(this, other)) return true;
-  
-    return 
-      other.fcmToken == fcmToken &&
-      other.id == id &&
-      other.email == email &&
-      other.profileImage == profileImage &&
-      other.name == name &&
-      other.creator == creator &&
-      other.analects == analects &&
-      other.category == category &&
-      other.creatorBio == creatorBio &&
-      other.followers == followers &&
-      other.noOfListener == noOfListener &&
-      other.noOfSubscribers == noOfSubscribers &&
-      other.following == following &&
-      other.totalView == totalView &&
-      other.creatorSubs == creatorSubs;
+
+    return other.fcmToken == fcmToken &&
+        other.id == id &&
+        other.email == email &&
+        other.profileImage == profileImage &&
+        other.name == name &&
+        other.creator == creator &&
+        other.analects == analects &&
+        other.category == category &&
+        other.creatorBio == creatorBio &&
+        other.followers == followers &&
+        other.noOfListener == noOfListener &&
+        other.noOfSubscribers == noOfSubscribers &&
+        other.following == following &&
+        other.totalView == totalView &&
+        other.creatorSubs == creatorSubs &&
+        other.allowNotification == allowNotification;
   }
 
   @override
   int get hashCode {
     return fcmToken.hashCode ^
-      id.hashCode ^
-      email.hashCode ^
-      profileImage.hashCode ^
-      name.hashCode ^
-      creator.hashCode ^
-      analects.hashCode ^
-      category.hashCode ^
-      creatorBio.hashCode ^
-      followers.hashCode ^
-      noOfListener.hashCode ^
-      noOfSubscribers.hashCode ^
-      following.hashCode ^
-      totalView.hashCode ^
-      creatorSubs.hashCode;
+        id.hashCode ^
+        email.hashCode ^
+        profileImage.hashCode ^
+        name.hashCode ^
+        creator.hashCode ^
+        analects.hashCode ^
+        category.hashCode ^
+        creatorBio.hashCode ^
+        followers.hashCode ^
+        noOfListener.hashCode ^
+        noOfSubscribers.hashCode ^
+        following.hashCode ^
+        totalView.hashCode ^
+        creatorSubs.hashCode ^
+        allowNotification.hashCode;
   }
 }

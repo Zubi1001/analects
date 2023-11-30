@@ -1,6 +1,7 @@
 import 'package:analects/app/modules/create_analects/create_analects.dart';
 import 'package:analects/app/modules/widgets/widget_imports.dart';
 import 'package:analects/controller/creator_profile_controller.dart';
+import 'package:analects/models/analect_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 
@@ -14,8 +15,8 @@ class CreatorProfilePage extends StatefulWidget {
 
 class _CreatorProfilePageState extends State<CreatorProfilePage> {
   final controller = Get.put(CreatorProfileController());
-
   final user = Get.find<UserController>().currentUser;
+  List<AnalectModel?> get analectList => controller.analectList;
 
   @override
   void initState() {
@@ -25,18 +26,22 @@ class _CreatorProfilePageState extends State<CreatorProfilePage> {
   }
 
   Future<void> onInit() async {
+    LoadingConfig.showLoading();
     await controller.creatorsAnalects(creatorUid: widget.creatorId);
     await controller.checkSubscribed(creatorId: widget.creatorId);
     await controller.checkFollower(creatorId: widget.creatorId);
+    LoadingConfig.hideLoading();
   }
 
   @override
   Widget build(BuildContext context) {
-    log("Total analects ${controller.analectList.length}");
     return DefaultTabController(
       length: 2,
       child: Scaffold(
         backgroundColor: AppColors.kPrimaryColor,
+        floatingActionButton: user!.creator && user!.id == widget.creatorId
+            ? const CreateAnalectFloatingButton()
+            : null,
         appBar: CustomAppBar(
           title: "",
           backgroundColor: AppColors.noColor,
@@ -44,11 +49,10 @@ class _CreatorProfilePageState extends State<CreatorProfilePage> {
             PullDownButton(
               itemBuilder: (context) => [
                 PullDownMenuItem(
-                  title: "Create Analects",
-                  onTap: () {
-                    if (user!.creator) Get.to(() => const CreateAnalects());
-                  },
-                ),
+                    title: "Create Analects",
+                    onTap: () {
+                      if (user!.creator) Get.to(() => const CreateAnalects());
+                    }),
               ],
               position: PullDownMenuPosition.automatic,
               buttonBuilder: (context, show) => CupertinoButton(
@@ -73,6 +77,7 @@ class _CreatorProfilePageState extends State<CreatorProfilePage> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   UserModel? creatorData = snapshot.data!.data();
+                  onInit();
                   return Obx(
                     () {
                       return SingleChildScrollView(
@@ -226,7 +231,7 @@ class _CreatorProfilePageState extends State<CreatorProfilePage> {
                                           ],
                                         ),
                                         SizedBox(height: 10.h),
-                                         Row(
+                                        Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
@@ -324,10 +329,10 @@ class _CreatorProfilePageState extends State<CreatorProfilePage> {
           shrinkWrap: true,
           padding: EdgeInsets.zero,
           scrollDirection: Axis.vertical,
-          itemCount: controller.analectList.length,
+          itemCount: analectList.length,
           itemBuilder: (context, index) {
             return AnalectsListViewItem(
-              analectData: controller.analectList[index],
+              analectData: analectList[index],
             );
           },
         ),
