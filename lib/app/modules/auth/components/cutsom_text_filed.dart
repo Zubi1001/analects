@@ -13,6 +13,7 @@ class CustomTextField extends StatefulWidget {
   final VoidCallback? Function(String?)? changeFunction;
   final VoidCallback? Function(String?)? completeFunction;
   final bool isPasswordField;
+  final int maxlines;
 
   const CustomTextField({
     required this.controller,
@@ -24,7 +25,7 @@ class CustomTextField extends StatefulWidget {
     this.validator,
     this.changeFunction,
     this.completeFunction,
-    this.isPasswordField = false,
+    this.isPasswordField = false,  this.maxlines = 1,
   });
 
   @override
@@ -46,6 +47,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
       validator: widget.validator,
       onChanged: widget.changeFunction,
       onFieldSubmitted: widget.completeFunction,
+      maxLines: widget.maxlines,
       style: TextStyle(color: Colors.white, fontSize: 16.sp),
       decoration: InputDecoration(
         fillColor: AppColors.kPrimary1Color,

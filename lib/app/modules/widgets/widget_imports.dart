@@ -17,9 +17,16 @@ export 'package:lottie/lottie.dart';
 export 'package:google_sign_in/google_sign_in.dart';
 export 'package:image_picker/image_picker.dart';
 export 'package:audio_session/audio_session.dart';
-export 'package:flutter_sound/flutter_sound.dart';
+export 'package:flutter_sound/flutter_sound.dart' hide PlayerState;
 export 'package:permission_handler/permission_handler.dart';
 export 'package:flutter_easyloading/flutter_easyloading.dart';
+export 'package:cached_network_image/cached_network_image.dart';
+export 'package:firebase_storage/firebase_storage.dart';
+export 'package:path_provider/path_provider.dart';
+export 'package:just_audio/just_audio.dart';
+export 'package:sleek_circular_slider/sleek_circular_slider.dart';
+
+
 
 
 ///Project Component & widgets
@@ -29,8 +36,6 @@ export 'package:analects/app/data/contents/app_typography.dart';
 export 'package:analects/app/modules/auth/components/cutsom_text_filed.dart';
 export 'package:analects/app/modules/widgets/button/custom_text_button.dart';
 export 'package:analects/app/modules/widgets/button/login_signin_button.dart';
-export 'package:analects/app/modules/home/components/catagories_scroll_view.dart';
-export 'package:analects/app/modules/home/components/horizontal_scroll_view.dart';
 export 'package:analects/app/onboarding_page/components/on_boarding_header_widget.dart';
 export 'package:analects/app/modules/home/components/newest_analects_scroll_view_item.dart';
 export 'package:analects/app/modules/home/components/play_and_pause_button.dart';
@@ -38,6 +43,7 @@ export 'package:analects/app/modules/home/components/horizontal_scroll_item.dart
 export 'package:analects/app/modules/creator_profile/components/up_down_text.dart';
 export 'package:analects/app/modules/widgets/app_bar/custom_app_bar.dart';
 export '../widgets/dropdown/custom_dropdown.dart';
+export 'package:analects/app/modules/widgets/dialogs/custom_toast.dart';
 
 
 export 'package:analects/app/modules/widgets/container/glassmorphism.dart';

@@ -1,14 +1,84 @@
-import 'package:sleek_circular_slider/sleek_circular_slider.dart';
+import 'package:analects/app/modules/play_analect/components/comment_bottom_sheet.dart';
+import 'package:analects/repo/analect_repo.dart';
+import 'package:analects/repo/user_repo.dart';
 
+import '../../../models/analect_model.dart';
 import '../widgets/widget_imports.dart';
 
-class PlayAnalect extends StatelessWidget {
-  final String audioFileUrl;
-  PlayAnalect({super.key, required this.audioFileUrl});
+class PlayAnalect extends StatefulWidget {
+  final AnalectModel analectData;
+  final bool autoPlay;
 
-  final playerController = Get.put(CreateAnalectsController());
-  final volume = 70.obs;
+  const PlayAnalect(
+      {super.key, required this.analectData, this.autoPlay = false});
+
+  @override
+  State<PlayAnalect> createState() => _PlayAnalectState();
+}
+
+class _PlayAnalectState extends State<PlayAnalect> {
+  late AudioPlayer player;
   final isPlaying = false.obs;
+  final _playerProgressPosition = Rxn<Duration>();
+  Duration? get playerPosition => _playerProgressPosition.value;
+  final volume = RxDouble(1.0);
+  final audioDuration = "00:00".obs;
+  final listenCheck = false.obs;
+  final user = Get.find<UserController>().currentUser!;
+
+  @override
+  void initState() {
+    onInit();
+    super.initState();
+  }
+
+  Future<void> onInit() async {
+    final session = await AudioSession.instance;
+    await session.configure(const AudioSessionConfiguration.speech());
+    player = AudioPlayer();
+    Duration? duration = await player.setUrl(widget.analectData.audioUrl);
+    audioDuration.value = formatDuration(duration!);
+
+    player.setUrl(widget.analectData.audioUrl);
+    if (widget.autoPlay) {
+      player.play();
+    }
+    player.playerStateStream.listen((playerState) {
+      isPlaying.value = playerState.playing;
+      setState(() {});
+      final processingState = playerState.processingState;
+      if (processingState == ProcessingState.loading ||
+          processingState == ProcessingState.buffering) {
+      } else if (!isPlaying.value) {
+      } else if (processingState != ProcessingState.completed) {
+      } else if (processingState == ProcessingState.completed) {
+        player.seek(Duration.zero);
+        player.stop();
+      } else {
+        player.seek(Duration.zero);
+        player.pause();
+      }
+    });
+    player.positionStream.listen((Duration position) {
+      _playerProgressPosition.value = position;
+    });
+  }
+
+  void seek(Duration position) {
+    player.seek(position);
+  }
+
+  String formatDuration(Duration duration) {
+    final minutes = (duration.inMinutes).toString().padLeft(2, '0');
+    final seconds = (duration.inSeconds).toString().padLeft(2, '0');
+    return '$minutes:$seconds';
+  }
+
+  @override
+  void dispose() {
+    player.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,9 +112,8 @@ class PlayAnalect extends StatelessWidget {
                         child: CircleAvatar(
                           radius: 100.w,
                           backgroundColor: AppColors.kSecondaryColor,
-                          backgroundImage: const AssetImage(
-                            AppAssets.creatorImage,
-                          ),
+                          backgroundImage: CachedNetworkImageProvider(
+                              widget.analectData.image),
                         ),
                       ),
                       Transform.scale(
@@ -56,29 +125,23 @@ class PlayAnalect extends StatelessWidget {
                               progressBarColor: AppColors.kSecondaryColor,
                             ),
                             size: 245.w,
-                            startAngle:
-                                360,
+                            startAngle: 360,
                             angleRange: 180,
                             customWidths: CustomSliderWidths(
-                              progressBarWidth: 10.w,
-                              trackWidth: 10.w,
+                              progressBarWidth: 15.w,
+                              trackWidth: 15.w,
                             ),
                             infoProperties: InfoProperties(
                               mainLabelStyle: AppTypography.kBold16.copyWith(
                                 color: AppColors.noColor,
                               ),
-                              // modifier: (value) {
-                              //   final displayValue =
-                              //       Duration(seconds: value.toInt()).toString();
-                              //   return displayValue;
-                              // },
                             ),
                           ),
-                          min: 0,
-                          max: 100,
-                          initialValue: volume.value.toDouble(),
+                          min: 0.0,
+                          max: 1.0,
+                          initialValue: volume.value,
                           onChange: (value) {
-                            volume.value = value.toInt();
+                            player.setVolume(value);
                           },
                         ),
                       ),
@@ -87,8 +150,9 @@ class PlayAnalect extends StatelessWidget {
                         left: 0,
                         child: InkWell(
                           onTap: () {
-                            if (volume.value > 0) {
-                              volume.value -= 10;
+                            if (volume.value > 0.1) {
+                              volume.value -= 0.1;
+                              player.setVolume(volume.value);
                             }
                           },
                           child: SvgPicture.asset(
@@ -103,8 +167,9 @@ class PlayAnalect extends StatelessWidget {
                         right: 0,
                         child: GestureDetector(
                           onTap: () {
-                            if (volume.value < 100) {
-                              volume.value += 10;
+                            if (volume.value < 1.0) {
+                              volume.value += 0.1;
+                              player.setVolume(volume.value);
                             }
                           },
                           child: SvgPicture.asset(
@@ -117,14 +182,13 @@ class PlayAnalect extends StatelessWidget {
                     ],
                   ),
                 ),
-              
                 Stack(
                   alignment: Alignment.center,
                   children: [
                     Lottie.asset(
                       AppAssets.audioAnimation,
-                      animate: playerController.isPlaying.value,
-                      repeat: playerController.isPlaying.value ? true : false,
+                      animate: isPlaying.value,
+                      repeat: isPlaying.value ? true : false,
                       frameRate: FrameRate.max,
                     ),
                     Positioned(
@@ -132,12 +196,12 @@ class PlayAnalect extends StatelessWidget {
                       child: Column(
                         children: [
                           Text(
-                            "Porta tempus turpis",
+                            widget.analectData.analectName,
                             style: AppTypography.kBold16
                                 .copyWith(color: AppColors.kWhiteColor),
                           ),
                           Text(
-                            "At pharetra at",
+                            widget.analectData.category,
                             style: AppTypography.kLight14.copyWith(
                                 fontSize: 13,
                                 color: AppColors.kWhiteColor.withOpacity(.3)),
@@ -150,12 +214,14 @@ class PlayAnalect extends StatelessWidget {
                       child: RichText(
                         text: TextSpan(children: [
                           TextSpan(
-                            text: "00:00",
+                            text:
+                                formatDuration(playerPosition ?? Duration.zero),
+                            // playerController.playerdisplayTime,
                             style: AppTypography.kBold16
                                 .copyWith(color: AppColors.kWhiteColor),
                           ),
                           TextSpan(
-                            text: " /00:00",
+                            text: " / ${audioDuration.value}",
                             style: AppTypography.kBold14.copyWith(
                                 fontSize: 13,
                                 color: AppColors.kWhiteColor.withOpacity(.3)),
@@ -168,23 +234,51 @@ class PlayAnalect extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SvgPicture.asset(AppAssets.tenSecondBackIcon),
+                    InkWell(
+                        onTap: () {
+                          if (player.position > Duration.zero) {
+                            final currentPosition = player.position;
+                            final newPosition =
+                                currentPosition - const Duration(seconds: 10);
+                            seek(newPosition);
+                            showToast("- 10 second");
+                          }
+                        },
+                        child: SvgPicture.asset(AppAssets.tenSecondBackIcon)),
                     SizedBox(
                       width: 20.w,
                     ),
                     GestureDetector(
-                      onTap: () {
-                        playerController.isPlaying.value = !playerController.isPlaying.value;
-                        playerController.play(audioUrl: audioFileUrl);
+                      onTap: () async {
+                        log(isPlaying.value.toString());
+                        if (isPlaying.value) {
+                          player.pause();
+                        } else {
+                          if (!widget.autoPlay && !listenCheck.value) {
+                            player.play();
+                            if (widget.analectData.creatorId != user.id) {
+                              await UserRepo().incrementListenCount(
+                                uid: widget.analectData.creatorId,
+                              );
+                              await AnalectsRepo().incrementListenCount(
+                                  analectId: widget.analectData.analectId);
+                            }
+
+                            listenCheck.value = true;
+                          } else {
+                            player.play();
+                          }
+                        }
+                        isPlaying.value ? player.pause() : player.play();
                       },
                       child: CircleAvatar(
-                        backgroundColor: playerController.isPlaying.value
+                        backgroundColor: isPlaying.value
                             ? AppColors.kWhiteColor.withOpacity(.3)
                             : AppColors.kSecondaryColor,
                         radius: 40.h,
                         child: Center(
                           child: SvgPicture.asset(
-                            playerController. isPlaying.value
+                            isPlaying.value
                                 ? AppAssets.stopAudioIcon
                                 : AppAssets.pauseButton,
                             width: 24.w,
@@ -196,23 +290,49 @@ class PlayAnalect extends StatelessWidget {
                     SizedBox(
                       width: 20.w,
                     ),
-                    SvgPicture.asset(AppAssets.tenSecondForwardIcon),
+                    InkWell(
+                        onTap: () async {
+                          // Duration? duration = await player.setUrl(widget.analectData.audioUrl);
+                          // if(duration! >  const Duration(seconds: 10)){
+                          final currentPosition = player.position;
+                          final newPosition =
+                              currentPosition + const Duration(seconds: 10);
+                          seek(newPosition);
+                          showToast("+ 10 second");
+                          // }
+                        },
+                        child:
+                            SvgPicture.asset(AppAssets.tenSecondForwardIcon)),
                   ],
                 ),
                 SizedBox(
                   height: 30.h,
                 ),
-                Column(
-                  children: [
-                    Text(
-                      "Comments",
-                      style: AppTypography.kLight14.copyWith(
-                        color: AppColors.kWhiteColor.withOpacity(.3),
+                GestureDetector(
+                  onTap: () {
+                    Get.bottomSheet(
+                      CommentBottomSheet(widget: widget),
+                      isScrollControlled: true,
+                      ignoreSafeArea: false,
+                      isDismissible: false,
+                      enableDrag: true,
+                      barrierColor: AppColors.noColor,
+                    );
+                  },
+                  child: Column(
+                    children: [
+                      Text(
+                        "Comments",
+                        style: AppTypography.kLight14.copyWith(
+                          color: AppColors.kWhiteColor.withOpacity(.3),
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 5.h,),
-                    SvgPicture.asset(AppAssets.doubleArrowUpIcon),
-                  ],
+                      SizedBox(
+                        height: 5.h,
+                      ),
+                      SvgPicture.asset(AppAssets.doubleArrowUpIcon),
+                    ],
+                  ),
                 )
               ],
             ),

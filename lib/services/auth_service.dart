@@ -11,8 +11,9 @@ class AuthService {
     LoadingConfig.showLoading();
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
-      LoadingConfig.hideLoading();
       Get.put(UserController(), permanent: true);
+      Get.back();
+      LoadingConfig.hideLoading();
     } catch (e) {
       LoadingConfig.hideLoading();
       showErrorDialog(e.toString());
@@ -27,9 +28,23 @@ class AuthService {
       await _auth
           .createUserWithEmailAndPassword(email: email, password: password)
           .then((value) async {
-        final userModel =
-            UserModel(id: value.user!.uid, email: email, name: "");
-        await db.usersCollection.doc(userModel.id).set(userModel.toMap());
+        final userModel = UserModel(
+          id: value.user!.uid,
+          email: email,
+          name: "",
+          creator: false,
+          analects: 0,
+          category: '',
+          noOfSubscribers: 0,
+          creatorBio: '',
+          followers: 0,
+          noOfListener: 0,
+          following: 0,
+          profileImage: '',
+          creatorSubs: '',
+          totalView: 0,
+        );
+        await db.userCollection.doc(userModel.id).set(userModel);
         Get.put(UserController(), permanent: true);
         Get.back();
         LoadingConfig.hideLoading();
@@ -52,35 +67,40 @@ class AuthService {
       );
       final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
 
-      // Obtain the auth details from the request
       final GoogleSignInAuthentication? googleAuth =
           await googleUser?.authentication;
 
-      // Create a new credential
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth?.accessToken,
         idToken: googleAuth?.idToken,
       );
 
-      // Once signed in, return the UserCredential
       final userCredentials =
           await FirebaseAuth.instance.signInWithCredential(credential);
+
       final user = userCredentials.user;
       log("userData  $user");
       if (user != null) {
-        final doc = await db.usersCollection.doc(user.uid).get();
+        final doc = await db.userCollection.doc(user.uid).get();
         if (!doc.exists) {
           final userModel = UserModel(
             id: user.uid,
             name: user.displayName ?? "",
             email: user.email ?? "",
             profileImage: user.photoURL ?? "",
+            creator: false,
+            analects: 0,
+            category: '',
+            creatorBio: '',
+            followers: 0,
+            noOfListener: 0,
+            noOfSubscribers: 0,
+            following: 0,
+            creatorSubs: '',
+            totalView: 0,
           );
           log("userData ${userModel.toMap().toString()}");
-          await db.usersCollection
-              .doc(user.uid)
-              .set(userModel.toMap())
-              .then((value) {
+          await db.userCollection.doc(user.uid).set(userModel).then((value) {
             log("user data successfully added");
           });
         }
@@ -95,11 +115,27 @@ class AuthService {
     }
   }
 
+  Future<bool> sendPasswordResetEmail(String email) async {
+    try {
+      LoadingConfig.showLoading();
+      await _auth.sendPasswordResetEmail(email: email);
+      showToast("Password Reset Email Sent");
+      LoadingConfig.hideLoading();
+
+      return true;
+    } on FirebaseAuthException catch (e) {
+      LoadingConfig.hideLoading();
+      showErrorDialog(e.message.toString());
+      return false;
+    }
+  }
+
   Future<void> signOut() async {
     try {
       await _auth.signOut();
       await GoogleSignIn().signOut();
       Get.delete<UserController>(force: true);
+      Get.offAll(AuthWrapper());
     } catch (e) {
       showErrorDialog(e.toString());
       log(e.toString());

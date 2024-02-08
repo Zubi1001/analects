@@ -1,4 +1,4 @@
-import 'package:firebase_storage/firebase_storage.dart';
+
 
 import '../app/modules/widgets/widget_imports.dart';
 
@@ -6,13 +6,13 @@ class FirebaseStorageService {
   static Future<String> uploadToStorage(
       {required File file,
       required String folderName,
-      String? imageName,
+      String? fileName,
       bool showLoader = true}) async {
     try {
       final Reference firebaseStorageRef = FirebaseStorage.instance.ref().child(
-            imageName == null
+            fileName == null
                 ? '$folderName/file${DateTime.now().millisecondsSinceEpoch}'
-                : '$folderName/$imageName',
+                : '$folderName/$fileName',
           );
 
       final UploadTask uploadTask = firebaseStorageRef.putFile(file);

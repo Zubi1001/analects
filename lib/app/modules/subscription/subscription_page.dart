@@ -1,9 +1,14 @@
 import 'package:analects/app/modules/widgets/widget_imports.dart';
+import 'package:analects/controller/creator_profile_controller.dart';
 
 
 
 class SubscriptionPage extends StatelessWidget {
-  const SubscriptionPage({super.key});
+  final UserModel creatorData;
+   SubscriptionPage({super.key, required this.creatorData});
+
+
+  final _creatorProfileController = Get.find<CreatorProfileController>();
 
   @override
   Widget build(BuildContext context) {
@@ -38,11 +43,11 @@ class SubscriptionPage extends StatelessWidget {
                         child: Container(
                           width: 70.w,
                           height: 70.w,
-                          decoration: const BoxDecoration(
+                          decoration:  BoxDecoration(
                               color: AppColors.kSecondaryColor,
                               shape: BoxShape.circle,
-                              image: DecorationImage(image: AssetImage(AppAssets.creatorImage), fit: BoxFit.cover)),
-                          // child: Image.asset(AppAssets.creatorImage,fit: BoxFit.cover,),
+                              image: DecorationImage(image: CachedNetworkImageProvider(creatorData.profileImage), fit: BoxFit.cover)),
+                    
                         ),
                       ),
                       Positioned(
@@ -64,7 +69,7 @@ class SubscriptionPage extends StatelessWidget {
                 height: 25.h,
               ),
               Text(
-                "Subscribe to Joy & Jill",
+                "Subscribe to ${creatorData.name}",
                 style: AppTypography.kBold16.copyWith(color: AppColors.kWhiteColor),
               ),
               SizedBox(
@@ -153,10 +158,13 @@ class SubscriptionPage extends StatelessWidget {
                 height: 30.h,
               ),
               CustomButton(
-                text: "Subscribe • \$5.79/month",
+                text: "Subscribe • ${creatorData.creatorSubs =="Free Plan"?"\$0/month":"\$5.79/month"}",
                 width: context.width,
                 height: 60.h,
-                onTap: () {},
+                onTap: ()  {
+                   Get.back();
+                     _creatorProfileController.setSubscribe(creatorId: creatorData.id,);
+                },
               ),
               SizedBox(
                 height: 30.h,

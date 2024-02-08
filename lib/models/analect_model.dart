@@ -9,8 +9,11 @@ class AnalectModel {
   String category;
   String image;
   String audioUrl;
-  String noOfListen;
-  String noOfView;
+  int noOfListen;
+  int noOfView;
+  int timestamp;
+
+  
   AnalectModel({
     required this.analectId,
     required this.creatorId,
@@ -21,6 +24,7 @@ class AnalectModel {
     required this.audioUrl,
     required this.noOfListen,
     required this.noOfView,
+    required this.timestamp,
   });
 
   AnalectModel copyWith({
@@ -31,8 +35,9 @@ class AnalectModel {
     String? category,
     String? image,
     String? audioUrl,
-    String? noOfListen,
-    String? noOfView,
+    int? noOfListen,
+    int? noOfView,
+    int? timestamp,
   }) {
     return AnalectModel(
       analectId: analectId ?? this.analectId,
@@ -44,6 +49,7 @@ class AnalectModel {
       audioUrl: audioUrl ?? this.audioUrl,
       noOfListen: noOfListen ?? this.noOfListen,
       noOfView: noOfView ?? this.noOfView,
+      timestamp: timestamp ?? this.timestamp,
     );
   }
 
@@ -58,6 +64,7 @@ class AnalectModel {
       'audioUrl': audioUrl,
       'noOfListen': noOfListen,
       'noOfView': noOfView,
+      'timestamp': timestamp,
     };
   }
 
@@ -70,8 +77,9 @@ class AnalectModel {
       category: map['category'] as String,
       image: map['image'] as String,
       audioUrl: map['audioUrl'] as String,
-      noOfListen: map['noOfListen'] as String,
-      noOfView: map['noOfView'] as String,
+      noOfListen: map['noOfListen'] as int,
+      noOfView: map['noOfView'] as int,
+      timestamp: map['timestamp'] as int,
     );
   }
 
@@ -81,7 +89,7 @@ class AnalectModel {
 
   @override
   String toString() {
-    return 'AnalectModel(analectId: $analectId, creatorId: $creatorId,creatorName: $creatorName, analectName: $analectName, category: $category, image: $image, audioUrl: $audioUrl, noOfListen: $noOfListen, noOfView: $noOfView)';
+    return 'AnalectModel(analectId: $analectId, creatorId: $creatorId, creatorName: $creatorName, analectName: $analectName, category: $category, image: $image, audioUrl: $audioUrl, noOfListen: $noOfListen, noOfView: $noOfView, timestamp: $timestamp)';
   }
 
   @override
@@ -97,7 +105,8 @@ class AnalectModel {
       other.image == image &&
       other.audioUrl == audioUrl &&
       other.noOfListen == noOfListen &&
-      other.noOfView == noOfView;
+      other.noOfView == noOfView &&
+      other.timestamp == timestamp;
   }
 
   @override
@@ -110,6 +119,7 @@ class AnalectModel {
       image.hashCode ^
       audioUrl.hashCode ^
       noOfListen.hashCode ^
-      noOfView.hashCode;
+      noOfView.hashCode ^
+      timestamp.hashCode;
   }
 }
