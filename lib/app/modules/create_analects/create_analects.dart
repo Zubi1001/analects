@@ -1,5 +1,6 @@
 import 'package:analects/app/modules/widgets/dialogs/confirmation_dialog.dart';
 import 'package:analects/app/modules/widgets/widget_imports.dart';
+import 'package:flutter/cupertino.dart';
 
 class CreateAnalects extends StatelessWidget {
   const CreateAnalects({super.key});
@@ -31,11 +32,40 @@ class CreateAnalects extends StatelessWidget {
                     child: Stack(
                       alignment: Alignment.topCenter,
                       children: [
-                        Lottie.asset(
-                          AppAssets.audioAnimation,
-                          animate: controller.isRecording.value,
-                          repeat: controller.isRecording.value ? true : false,
-                          frameRate: FrameRate.max,
+                        CupertinoContextMenu(
+                          actions: [
+                            CupertinoContextMenuAction(
+                              child: const Text('Save'),
+                              onPressed: () {
+                                if (controller.elapsedTime.value > 0) {
+                                  Get.dialog(ConfirmationDialog(
+                                      onConfirm: () {
+                                        controller.stopRecording();
+                                        Get.back();
+                                        Get.to(() => AnalectDetail());
+                                      },
+                                      confirmationText:
+                                          'Are you sure you want to save this audio?'));
+                                } else {
+                                  showErrorDialog(
+                                      'Please record something first');
+                                }
+                              },
+                            ),
+                            CupertinoContextMenuAction(
+                              child: const Text('Discard'),
+                              onPressed: () {
+                                controller.reset();
+                                Get.back();
+                              },
+                            ),
+                          ],
+                          child: Lottie.asset(
+                            AppAssets.audioAnimation,
+                            animate: controller.isRecording.value,
+                            repeat: controller.isRecording.value ? true : false,
+                            frameRate: FrameRate.max,
+                          ),
                         ),
                         Text(
                           controller.displayTime,

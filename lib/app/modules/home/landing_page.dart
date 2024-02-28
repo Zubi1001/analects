@@ -85,7 +85,7 @@ class LandingPage extends StatelessWidget {
                     child: controller.topCreatorList.isEmpty
                         ? Center(
                             child: Text(
-                              "No Creator Found",
+                              "No Creators Found",
                               style: AppTypography.kBold16
                                   .copyWith(color: AppColors.kWhiteColor),
                             ),
