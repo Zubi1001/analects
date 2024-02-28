@@ -48,17 +48,19 @@ class DefaultFirebaseOptions {
         );
     }
   }
-
+  //replace with your own
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBXrgRfKWERE8TyIIJmP6eUPpYKFgzfTJw',
+    apiKey: '',
     appId: '1:1036055711504:android:d22179bb92e514bbfedf95',
     messagingSenderId: '1036055711504',
     projectId: 'analects-7010c',
     storageBucket: 'analects-7010c.appspot.com',
   );
 
+  //replace with your own
+
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAcMXGcmwaaV6zxh0gyUZe90L-79CsufwU',
+    apiKey: '',
     appId: '1:1036055711504:ios:80c64b3aec7981d8fedf95',
     messagingSenderId: '1036055711504',
     projectId: 'analects-7010c',
